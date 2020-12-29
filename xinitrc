@@ -8,14 +8,14 @@
 # (login screen) and so they are needed there. To prevent doubling up commands,
 # I source them here with the line below.
 
-# if [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/x11/xprofile" ]; then
-# . "${XDG_CONFIG_HOME:-$HOME/.config}/x11/xprofile"
-# else
-#   . "$HOME/.xprofile"
-# fi
+if [ -f "${XDG_CONFIG_HOME:-$HOME/dotfiles}/zsh/set_path.sh" ]; then
+    . "${XDG_CONFIG_HOME:-$HOME/dotfiles}/zsh/set_path.sh"
+fi
 
 # ssh-agent
 # exec dwm
 
-picom -b
-exec dbus-launch leftwm
+
+#exec ssh-agent dbus-launch leftwm
+sxhkd &
+exec ssh-agent bspwm

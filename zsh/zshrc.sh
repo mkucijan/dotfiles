@@ -25,38 +25,11 @@ export EDITOR=nvim
 
 #PATH
 
-# local
-export PATH=$PATH:$DOTFILES_HOME/.local/bin
-#statusbar
-export PATH=$PATH:$DOTFILES_HOME/.local/bin/statusbar
-
-#homebrew
-export PATH=$PATH:/home/linuxbrew/.linuxbrew/bin
-export PATH=$PATH:/opt/brew/bin
+source $DOTFILES_HOME/dotfiles/zsh/set_path.sh
 
 # autosuggestions
-source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $DOTFILES_HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 bindkey '^E' autosuggest-accept
-
-#flutter
-export PATH=$PATH:$DOTFILES_HOME/programs/flutter/bin
-
-# Android
-export PATH=$PATH:$DOTFILES_HOME/Android/Sdk/platform-tools
-
-# GPG
-GPG_TTY=$(tty)
-export GPG_TTY
-
-# kubernetes
-export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
-export PATH=$PATH:~/.jx/bin
-
-# jenkins x
-#source <(jx completion zsh)
-
-# linkerd
-export PATH=$PATH:$HOME/.linkerd2/bin
 
 # for skaffold and kubectl https://github.com/spf13/cobra/issues/881
 autoload -Uz compinit && compinit -C
@@ -67,30 +40,12 @@ source <(skaffold completion zsh)
 #kubectl
 source <(kubectl completion zsh)
 
-export PATH="$HOME/.tmuxifier/bin:$PATH"
-eval "$(tmuxifier init -)"
 
-# programing langugages
-export GOPATH=$HOME/go
-export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
-export PATH="$PATH:$HOME/.cargo/bin"
-export NODE_PATH="$NODE_PATH:$HOME/npm/lib/node_modules"
-export PATH="$PATH:$HOME/npm/bin"
-#export PATH="$HOME/.rbenv/bin:$PATH"
-#export PATH="$HOME/.rbenv/shims:$PATH"
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f "$DOTFILES_HOME/google-cloud-sdk/path.zsh.inc" ]; then . "$DOTFILES_HOME/google-cloud-sdk/path.zsh.inc"; fi
 
-export PATH="$DOTFILES_HOME/.deno/bin:$PATH"
-export PATH=$PATH:$HOME/programs/depot_tools
-
-export PATH="$HOME/.pyenv/bin:$PATH"
-#eval "$(pyenv init -)"
-#eval "$(pyenv virtualenv-init -)"
-
-export WORKON_HOME=$HOME/.virtualenvs
-source /usr/bin/virtualenvwrapper.sh
-#source $HOME/.local/bin/virtualenvwrapper.sh
-#export PYENV_VIRTUALENVWRAPPER_PREFER_PYVENV="true"
-
+# The next line enables shell command completion for gcloud.
+if [ -f "$DOTFILES_HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$DOTFILES_HOME/google-cloud-sdk/completion.zsh.inc"; fi
 
 #fd
 FD_OPTIONS="--follow --exclude .git --exclude node_modules"
@@ -138,11 +93,3 @@ export WASMER_DIR="$HOME/.wasmer"
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$DOTFILES_HOME/.sdkman"
 [[ -s "$DOTFILES_HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$DOTFILES_HOME/.sdkman/bin/sdkman-init.sh"
-
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f "$DOTFILES_HOME/google-cloud-sdk/path.zsh.inc" ]; then . "$DOTFILES_HOME/google-cloud-sdk/path.zsh.inc"; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f "$DOTFILES_HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$DOTFILES_HOME/google-cloud-sdk/completion.zsh.inc"; fi
-

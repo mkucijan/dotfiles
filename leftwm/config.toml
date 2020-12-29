@@ -2,17 +2,39 @@ modkey = "Mod4"
 workspaces = []
 tags = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
-[[keybind]]
-command = "Execute"
-value = "dmenu_run"
-modifier = ["modkey"]
-key = "p"
-
+# Terminal
 [[keybind]]
 command = "Execute"
 value = "alacritty"
 modifier = ["modkey", "Shift"]
 key = "Return"
+
+# Prompt
+[[keybind]]
+command = "Execute"
+value = "rofi -show drun"
+modifier = ["modkey"]
+key = "p"
+
+[[keybind]]
+command = "Execute"
+value = "rofi -show file-browser"
+modifier = ["modkey", "Shift"]
+key = "f"
+
+[[keybind]]
+command = "Execute"
+value = "rofi -show window"
+modifier = ["Mod1"]
+key = "space"
+
+[[keybind]]
+command = "Execute"
+value = "rofi -show ssh"
+modifier = ["Mod1"]
+key = "Control_R"
+
+# Utils
 
 [[keybind]]
 command = "CloseWindow"
@@ -36,10 +58,32 @@ value = "slock"
 modifier = ["modkey", "Control"]
 key = "l"
 
+# Volume
+
 [[keybind]]
-command = "MoveToLastWorkspace"
-modifier = ["modkey", "Shift"]
-key = "w"
+command = "Execute"
+value = "pamixer -t"
+modifier = []
+key = "XF86XK_AudioMute"
+
+[[keybind]]
+command = "Execute"
+value = "pamixer --allow-boost -i 3"
+modifier = []
+key = "XF86XK_AudioRaiseVolume"
+
+[[keybind]]
+command = "Execute"
+value = "pamixer --allow-boost -d 3"
+modifier = []
+key = "XF86XK_AudioLowerVolume"
+
+# Move worksapces and tags
+
+[[keybind]]
+command = "MoveWindowTop"
+modifier = ["modkey"]
+key = "Return"
 
 [[keybind]]
 command = "SwapTags"
@@ -47,19 +91,19 @@ modifier = ["modkey"]
 key = "w"
 
 [[keybind]]
+command = "MoveToLastWorkspace"
+modifier = ["modkey", "Shift"]
+key = "w"
+
+[[keybind]]
 command = "MoveWindowUp"
 modifier = ["modkey", "Shift"]
-key = "k"
+key = "k" 
 
 [[keybind]]
 command = "MoveWindowDown"
 modifier = ["modkey", "Shift"]
 key = "j"
-
-[[keybind]]
-command = "MoveWindowTop"
-modifier = ["modkey"]
-key = "Return"
 
 [[keybind]]
 command = "FocusWindowUp"
@@ -84,7 +128,7 @@ key = "j"
 [[keybind]]
 command = "FocusWorkspaceNext"
 modifier = ["modkey"]
-key = "l
+key = "l"
 
 [[keybind]]
 command = "FocusWorkspacePrevious"
@@ -100,6 +144,8 @@ key = "Right"
 command = "FocusPreviousTag"
 modifier = ["modkey"]
 key = "Left"
+
+# Tags
 
 [[keybind]]
 command = "GotoTag"
