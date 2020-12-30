@@ -123,21 +123,27 @@ fi
 
 # zsh autosuggestions
 ZSH_SUGGESTION_PATH=$HOME/.zsh/zsh-autosuggestions
-if [ ! -f "$ZSH_SUGGESTION_PATH" ]; then
-    git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
+if [ ! -f "$ZSH_SUGGESTIONS_PATH" ]; then
+    git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_SUGGESTIONS_PATH
 fi
 
-echo
-echo -n "Install Rust? (y/n) "
-old_stty_cfg=$(stty -g)
-stty raw -echo
-answer=$( while ! head -c 1 | grep -i '[ny]' ;do true ;done )
-stty $old_stty_cfg
-if echo "$answer" | grep -iq "^y" ;then
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-else
-	echo -e "\nSkipping."
+# tmuxifier
+TMUXIFIER_PATH=$HOME/.tmuxifier
+if [ ! -f "$TMUXIFIER_PATH" ]; then
+    git clone https://github.com/jimeh/tmuxifier.git $TMUXIFIER_PATH
 fi
+
+# echo
+# echo -n "Install Rust? (y/n) "
+# old_stty_cfg=$(stty -g)
+# stty raw -echo
+# answer=$( while ! head -c 1 | grep -i '[ny]' ;do true ;done )
+# stty $old_stty_cfg
+# if echo "$answer" | grep -iq "^y" ;then
+#     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+# else
+# 	echo -e "\nSkipping."
+# fi
 
 #
 newperms "%wheel ALL=(ALL) ALL #YOLKIN

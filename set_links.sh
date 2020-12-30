@@ -6,7 +6,7 @@ cp -R -u -p $PWD/fonts $HOME/.fonts
 # Terminal conf
 ln -sf $PWD/alacritty $HOME/.config/
 printf "source '$HOME/dotfiles/zsh/zshrc_manager.sh'" > $HOME/.zshrc
-sudo printf "source '$HOME/dotfiles/zsh/zshrc_manager.sh'" > /root/.zshrc
+# sudo printf "source '$HOME/dotfiles/zsh/zshrc_manager.sh'" > /root/.zshrc
 printf "so $HOME/dotfiles/vim/vimrc.vim" > $HOME/.vimrc
 mkdir -p $HOME/.config/nvim
 printf "source $HOME/dotfiles/vim/init.vim" > $HOME/.config/nvim/init.vim

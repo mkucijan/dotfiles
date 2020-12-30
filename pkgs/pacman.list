@@ -1,5 +1,5 @@
 alacritty
-brave
+bspwm
 calc
 chromium
 conky
@@ -23,8 +23,10 @@ polkit
 pulseaudio
 pulsemixer
 python-pywal
+python-virtualenvwrapper
 rofi
 slock
+sxhkd
 sxiv
 thunar
 wildmidi
