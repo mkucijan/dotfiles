@@ -113,3 +113,28 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 cargo install $(cat dotfiles/pkgs/cargo.list)
 yay -S - < dotfiles/pkgs/aur.list
 ```
+
+### Notes
+
+Nvidia gpu:
+
+```
+sudo pacman -S nvidia nvidia-settings
+yay -S
+nvidia-xconfig
+```
+
+Razer:
+
+```
+openrazer-meta
+```
+
+Audio:
+
+```
+pulseaudio
+pulseaudio-alsa
+pamixer
+pavucontrol
+```

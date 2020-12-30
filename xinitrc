@@ -11,6 +11,8 @@
 if [ -f "${XDG_CONFIG_HOME:-$HOME/dotfiles}/zsh/set_path.sh" ]; then
     . "${XDG_CONFIG_HOME:-$HOME/dotfiles}/zsh/set_path.sh"
 fi
+eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
+export SSH_AUTH_SOCK
 
 # ssh-agent
 # exec dwm

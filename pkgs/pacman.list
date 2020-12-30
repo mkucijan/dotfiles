@@ -12,12 +12,14 @@ feh
 gcc
 gnome-keyring
 go
+htop
 kubectl
 maim
 mpc
 mpd
 mpv
 neovim
+nvtop
 libsecret
 pamixer
 picom
@@ -32,9 +34,11 @@ slock
 sxhkd
 sxiv
 thunar
+transmission-cli
 wildmidi
 xclip
 xdo
 xorg
 xorg-xinit
+xwallpaper
 youtube-dl
