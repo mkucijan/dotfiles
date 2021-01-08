@@ -5,6 +5,7 @@ chromium
 conky
 dunst
 docker
+docker-compose
 etckeeper
 firefox
 flameshot
@@ -13,12 +14,14 @@ gcc
 gnome-keyring
 go
 htop
+inetutils
 kubectl
 maim
 mpc
 mpd
 mpv
 neovim
+npm
 nvtop
 libsecret
 pamixer

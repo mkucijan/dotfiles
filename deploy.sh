@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/env zsh
 
 
 newperms() { # Set special sudoers settings for install (or after).
@@ -108,28 +108,30 @@ fi
 
 # Install yay, and other deps
 if [ -x "$(command -v pacman)" ]; then
-	if ![-x "$(command -v yay)"]; then
+	if [ ! -x "$(command -v yay > /dev/null)"]; then
 		cd /tmp
 		git clone https://aur.archlinux.org/yay.git
 		cd yay
 		makepkg -si
 	fi
-	if ![-x "$(command -v snap)"]; then
-		echo "I aint got snap"
-	else
-		echo "I got snap"
-	fi
 fi
 
 # zsh autosuggestions
-ZSH_SUGGESTION_PATH=$HOME/.zsh/zsh-autosuggestions
-if [ ! -f "$ZSH_SUGGESTIONS_PATH" ]; then
-    git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_SUGGESTIONS_PATH
+ZSH_SUGGESTIONS_PATH=$HOME/.zsh/zsh-autosuggestions
+if [ ! -d "$ZSH_SUGGESTIONS_PATH" ]; then
+    git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_SUGGESTIONS_PATH
 fi
+
+# zsh syntax highlight
+ZSH_SYNTAX_HIGHLIGHT_PATH=$HOME/.zsh/zsh-syntax-highlighting
+if [ ! -d "$ZSH_SYNTAX_HIGHLIGHT_PATH" ]; then
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_SYNTAX_HIGHLIGHT_PATH
+fi
+
 
 # tmuxifier
 TMUXIFIER_PATH=$HOME/.tmuxifier
-if [ ! -f "$TMUXIFIER_PATH" ]; then
+if [ ! -d "$TMUXIFIER_PATH" ]; then
     git clone https://github.com/jimeh/tmuxifier.git $TMUXIFIER_PATH
 fi
 
@@ -146,8 +148,10 @@ fi
 # fi
 
 # Neovim plug
-sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
-       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+if [ ! -f "${XDG_DATA_HOME:-$HOME/.local/share}/nvim/site/autoload/plug.vim" ]; then
+    sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+           https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+fi
 
 mkdir -p ~/.vim/backup
 mkdir -p ~/.vim/undo

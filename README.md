@@ -9,3 +9,8 @@ Personal dotfiles
 ```
 
 ## clean install
+
+```
+curl -sS https://raw.githubusercontent.com/mkucijan/dotfiles/master/bootstrap.sh | bash
+```
+

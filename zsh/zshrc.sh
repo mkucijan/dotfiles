@@ -7,10 +7,49 @@ setopt INC_APPEND_HISTORY # To save every command before it is executed
 setopt SHARE_HISTORY # setopt inc_append_history
 # Aliases
 [ -x "$(command -v nvim)" ] && alias vim="nvim" vimdiff="nvim -d"
-alias ls="exa"
+[ -x "$(command -v exa)" ] && alias ls="exa"
 alias v="nvim -p"
 mkdir -p /tmp/log
 alias pbcopy="xclip -sel clip"
+
+# Change cursor shape for different vi modes.
+function zle-keymap-select {
+  if [[ ${KEYMAP} == vicmd ]] ||
+     [[ $1 = 'block' ]]; then
+    echo -ne '\e[1 q'
+  elif [[ ${KEYMAP} == main ]] ||
+       [[ ${KEYMAP} == viins ]] ||
+       [[ ${KEYMAP} = '' ]] ||
+       [[ $1 = 'beam' ]]; then
+    echo -ne '\e[5 q'
+  fi
+}
+zle -N zle-keymap-select
+zle-line-init() {
+    zle -K viins # initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
+    echo -ne "\e[5 q"
+}
+zle -N zle-line-init
+echo -ne '\e[5 q' # Use beam shape cursor on startup.
+preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
+
+# Edit line in vim with ctrl-e:
+autoload edit-command-line; zle -N edit-command-line
+bindkey '^z' edit-command-line
+
+# Basic auto/tab complete:
+autoload -U compinit
+zstyle ':completion:*' menu select
+zmodload zsh/complist
+compinit
+_comp_options+=(globdots)		# Include hidden files.
+
+# Use vim keys in tab complete menu:
+bindkey -M menuselect 'h' vi-backward-char
+bindkey -M menuselect 'k' vi-up-line-or-history
+bindkey -M menuselect 'l' vi-forward-char
+bindkey -M menuselect 'j' vi-down-line-or-history
+bindkey -v '^?' backward-delete-char
 
 
 # This is currently causing problems (fails when you run it anywhere that isn't a git project's root directory)
@@ -30,6 +69,9 @@ source $DOTFILES_HOME/dotfiles/zsh/set_path.sh
 # autosuggestions
 source $DOTFILES_HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 bindkey '^E' autosuggest-accept
+
+# syntaxhighlight
+source $DOTFILES_HOME/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # for skaffold and kubectl https://github.com/spf13/cobra/issues/881
 autoload -Uz compinit && compinit -C
