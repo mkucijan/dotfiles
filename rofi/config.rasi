@@ -3,5 +3,5 @@ configuration {
 	font: "Menlo for Powerline 16";
 	matching: "fuzzy";
 	hide-scrollbar: true;
-	theme: "/home/mkucijan/.config/rofi/slate.rasi";
+	theme: ".config/rofi/slate.rasi";
 }

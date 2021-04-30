@@ -14,8 +14,11 @@ gcc
 gnome-keyring
 go
 htop
+helm
 inetutils
+k9s
 kubectl
+kubectx
 maim
 mpc
 mpd
@@ -40,7 +43,7 @@ thunar
 transmission-cli
 wildmidi
 xclip
-xdo
+xdotool
 xorg
 xorg-xinit
 xwallpaper
