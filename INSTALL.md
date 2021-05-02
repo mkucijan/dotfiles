@@ -6,6 +6,9 @@
 ls /sys/firmware/efi/efivars
 ```
 
+#### For encrypted disk follow this
+https://gist.github.com/huntrar/e42aee630bee3295b2c671d098c81268
+
 #### For partitions
 
 ```
@@ -137,4 +140,9 @@ pulseaudio
 pulseaudio-alsa
 pamixer
 pavucontrol
+```
+
+Useful groups:
+```
+wheel storage power users librit docker kvm audio
 ```
