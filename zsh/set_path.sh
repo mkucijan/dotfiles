@@ -49,8 +49,10 @@ export PATH="$PATH:$HOME/npm/bin"
 export PATH="$DOTFILES_HOME/.deno/bin:$PATH"
 export PATH=$PATH:$HOME/programs/depot_tools
 
-export PATH="$HOME/.pyenv/bin:$PATH"
-#eval "$(pyenv init -)"
+#export PYENV_ROOT="$HOME/.pyenv"
+#export PATH="$PYENV_ROOT/bin:$PATH"
+#eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
 #eval "$(pyenv virtualenv-init -)"
 
 export WORKON_HOME=$HOME/.virtualenvs
