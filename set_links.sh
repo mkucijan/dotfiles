@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Fonts, always useful
-cp -R -u -p $PWD/fonts $HOME/.fonts
+cp -R -u -p $PWD/fonts/* $HOME/.fonts
 
 # Terminal conf
 ln -sf $PWD/alacritty $HOME/.config/

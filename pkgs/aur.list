@@ -1,7 +1,6 @@
 brave-bin
 jsonnet-bundler-bin
 lazydocker-git
-leftwm
 ly
 networkmanager-dmenu-git
 polybar-git
@@ -12,3 +11,4 @@ visual-studio-code-bin
 xkb-switch
 xtitle
 xorg-font-utils
+rofi-greenclip

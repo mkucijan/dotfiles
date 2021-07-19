@@ -35,6 +35,7 @@ pulsemixer
 python-pywal
 python-virtualenvwrapper
 rofi
+seahorse
 skaffold
 slock
 sxhkd

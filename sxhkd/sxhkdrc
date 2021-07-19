@@ -82,6 +82,10 @@ alt + {_,shift + }Tab
 ## Switch workspace
 ctrl + alt + {Left,Right}
 	bspc desktop -f {prev.local,next.local}
+#
+## lock screen
+super + ctrl + l
+	slock
 
 ## Switch to last opened workspace
 super + {Tab,grave}

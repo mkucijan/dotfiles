@@ -2,7 +2,8 @@
 
 # Main script for slecting other scripts and options
 
-case "$(printf "Open\\nMount disk\\nToggle torrent daemon\nAdd torrent\\nDisplay Select\\ndmenumountcifs\\nmaimpick\\nLeave" | rofi -dmenu -i -p "Run script")" in
+case "$(printf "Clipboard\\nOpen\\nMount disk\\nToggle torrent daemon\\nAdd torrent\\nDisplay Select\\ndmenumountcifs\\nmaimpick\\nLeave" | rofi -dmenu -i -p "Run script")" in
+    "Clipboard") show_clipboard ;;
 	"Open") dmenuhandler ;;
 	"Toggle torrent daemon") td-toggle ;;
 	"Add torrent") transadd ;;
