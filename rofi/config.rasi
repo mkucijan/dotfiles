@@ -1,6 +1,6 @@
 configuration {
-	modi: "run,drun,window,ssh,file-browser";
-	font: "Menlo for Powerline 16";
+	modi: "run,drun,window,ssh,filebrowser";
+	font: "Menlo for Powerline 14";
 	matching: "fuzzy";
 	hide-scrollbar: true;
 	theme: ".config/rofi/slate.rasi";
