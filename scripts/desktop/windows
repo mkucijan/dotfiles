@@ -1,0 +1,21 @@
+#!/bin/env bash
+# nodes=( $(bspc query -N -n .hidden -d focused ) ) && s=$(xtitle ${nodes[@]} |rofi -dmenu -i -format i -p "Hidden windows: ")
+ARR=( $(bspc query -N -n .hidden) )
+for index in "${!ARR[@]}"
+do
+    window=${ARR[index]}
+    title=$(xtitle $window)
+    if [[ $title == "dropdown" ]]; then
+        unset 'ARR[index]'
+    fi
+done
+nodes=("${ARR[@]}")
+s=$(xtitle ${nodes[@]} | rofi -dmenu -i -format i -p "Hidden windows: ")
+
+
+c=n
+
+if [[ -n "$s" ]]; then
+    bspc query -N -n >/dev/null || c=d
+    bspc node "${nodes[$s]}" -${c} focused -g hidden=off -f
+fi

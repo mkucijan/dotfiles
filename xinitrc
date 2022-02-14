@@ -11,7 +11,9 @@
 if [ -f "${XDG_CONFIG_HOME:-$HOME/dotfiles}/zsh/set_path.sh" ]; then
     . "${XDG_CONFIG_HOME:-$HOME/dotfiles}/zsh/set_path.sh"
 fi
-eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
+eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh,gpg)
+# export $(gnome-keyring-daemon --start --components=pkcs11,secrets,ssh,gpg)
+# dbus-update-activation-environment --systemd DISPLAY
 export SSH_AUTH_SOCK
 
 source /etc/X11/xinit/xinitrc.d/50-systemd-user.sh
@@ -21,7 +23,7 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 # ssh-agent
 # exec dwm
 
+# exec ssh-agent dbus-launch leftwm
 
-#exec ssh-agent dbus-launch leftwm
 sxhkd &
-exec ssh-agent bspwm
+exec ssh-agent dbus-launch bspwm

@@ -38,7 +38,6 @@ Plug 'https://github.com/joshdick/onedark.vim'
 " Plug 'https://github.com/tpope/vim-fugitive'
 " Plug 'https://github.com/mattn/webapi-vim'
 
-
 " Plug 'https://github.com/wesQ3/vim-windowswap'
 
 " Plug 'w0rp/ale' " using flake8

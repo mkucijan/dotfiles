@@ -18,7 +18,7 @@ key = "p"
 
 [[keybind]]
 command = "Execute"
-value = "rofi -show file-browser"
+value = "rofi -show filebrowser"
 modifier = ["modkey", "Shift"]
 key = "f"
 
@@ -89,6 +89,11 @@ key = "Return"
 command = "SwapTags"
 modifier = ["modkey"]
 key = "w"
+
+[[keybind]]
+command = "SwapTags"
+modifier = ["modkey"]
+key = "Tab"
 
 [[keybind]]
 command = "MoveToLastWorkspace"

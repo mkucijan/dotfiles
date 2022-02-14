@@ -20,6 +20,7 @@ k9s
 kubectl
 kubectx
 maim
+minikube
 mpc
 mpd
 mpv
@@ -36,6 +37,7 @@ python-pywal
 python-virtualenvwrapper
 rofi
 seahorse
+sd
 skaffold
 slock
 sxhkd

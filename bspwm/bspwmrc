@@ -5,20 +5,22 @@ bspc rule -r "*"
 xsetroot -cursor_name left_ptr &
 setbg
 dunst &
-nm-applet &
+# nm-applet &
 xrdb ~/.Xresources &
-picom -b --experimental-backends &
+picom -b &
+# compton &
 #xwallpaper --zoom ~/.config/wall.png &
 flameshot &
-#killall "launchlemon"
+killall "launchlemon"
 ~/.config/polybar/launch.sh &
-#killall bspswallow
-#pidof bspswallow | bspswallow &
+# killall bspswallow
+# pidof bspswallow | bspswallow &
 
 ###---MONITORS---###
-bspc monitor HDMI-0 -d 1 2 3 4 5 6 7 8 9
+bspc monitor HDMI-0 -d 1 2 3 4 5
 # bspc monitor HDMI-0 -d 1 2 3 4 5
 # bspc monitor DVI-I-0 -d 6 7 8 9
+bspc monitor DP-1 -d 6 7 8 9
 
 ###---Global Settings---###
 bspc config automatic_scheme alternate

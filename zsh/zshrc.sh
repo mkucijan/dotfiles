@@ -11,6 +11,7 @@ setopt SHARE_HISTORY # setopt inc_append_history
 alias v="nvim -p"
 mkdir -p /tmp/log
 alias pbcopy="xclip -sel clip"
+alias rust-musl-builder='docker run --rm -it -v "$(pwd)":/home/rust/src ekidd/rust-musl-builder'
 
 # Change cursor shape for different vi modes.
 function zle-keymap-select {

@@ -3,5 +3,5 @@ configuration {
 	font: "Menlo for Powerline 14";
 	matching: "fuzzy";
 	hide-scrollbar: true;
-	theme: ".config/rofi/slate.rasi";
 }
+@theme "slate.rasi"

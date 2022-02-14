@@ -6,6 +6,7 @@ cargo-generate
 cargo-inspect
 cargo-outdated
 cargo-sweep
+cargo-tarpaulin
 cargo-tree
 cargo-update
 cargo-watch
@@ -42,6 +43,7 @@ ripgrep_all
 tealdeer
 tokei
 topgrade
+trunk
 wasm-bindgen-cli
 wasm-pack
 xsv

@@ -17,6 +17,10 @@ super + d
 super + space
 	[[ "$(bspc query -N -n .window.local.hidden | wc -l)" = 0 ]] && bspc query -N -n .window.local.\!focused | while read n; do bspc node $n -g hidden=on; done || bspc query -N -n .window.local.hidden | while read n; do bspc node $n -g hidden=off; done
 
+## Hide window
+super + o
+    bspc node --flag hidden=on
+
 ## Launch common apps
 super + shift + {f,w,g}
 	{thunar,brave,geany}
