@@ -18,7 +18,7 @@ call plug#begin('~/.vim/plugged')
 " turn of if spacing is wrong
 " Plug 'tpope/vim-sleuth'
 
-" Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 "
 " Plug 'ripxorip/aerojump.nvim', { 'do': ':UpdateRemotePlugins' }
 "
@@ -35,7 +35,7 @@ Plug 'https://github.com/vim-airline/vim-airline'
 Plug 'https://github.com/vim-airline/vim-airline-themes'
 Plug 'https://github.com/joshdick/onedark.vim'
 " Plug 'https://github.com/sheerun/vim-polyglot'
-" Plug 'https://github.com/tpope/vim-fugitive'
+Plug 'https://github.com/tpope/vim-fugitive'
 " Plug 'https://github.com/mattn/webapi-vim'
 
 " Plug 'https://github.com/wesQ3/vim-windowswap'
@@ -51,7 +51,7 @@ Plug 'https://github.com/joshdick/onedark.vim'
 
 "Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
-" Plug 'rust-lang/rust.vim'
+Plug 'rust-lang/rust.vim'
 " Plug 'racer-rust/vim-racer'
 " Plug 'sebastianmarkow/deoplete-rust'
 
@@ -126,6 +126,7 @@ source $DOTFILES_HOME/dotfiles/vim/fzf.vim
 "     \ }
 "
 "
+let g:rustfmt_autosave = 1
 " let g:neoformat_rust_rustfmt = {
 "    \ 'exe': 'rustfmt',
 "    \ 'args': ['--edition', '2018', '--unstable-features'],
