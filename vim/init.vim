@@ -13,7 +13,8 @@ Plug 'phaazon/hop.nvim', {'branch': 'v2'}
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'https://github.com/vim-airline/vim-airline'
 Plug 'https://github.com/vim-airline/vim-airline-themes'
-Plug 'https://github.com/joshdick/onedark.vim'
+"Plug 'https://github.com/joshdick/onedark.vim'
+Plug 'tomasiser/vim-code-dark'
 
 
 " Fuzzy finder
@@ -23,7 +24,6 @@ Plug 'junegunn/fzf.vim'
 
 " Semantic language support
 Plug 'neovim/nvim-lspconfig'
-Plug 'nvim-lua/lsp_extensions.nvim'
 Plug 'hrsh7th/cmp-nvim-lsp', {'branch': 'main'}
 Plug 'hrsh7th/cmp-buffer', {'branch': 'main'}
 Plug 'hrsh7th/cmp-path', {'branch': 'main'}
@@ -48,8 +48,13 @@ Plug 'plasticboy/vim-markdown'
 " git
 Plug 'https://github.com/tpope/vim-fugitive'
 
-call plug#end()
+" Comment line(s) using t key
+Plug 'tomtom/tcomment_vim'
+let g:tcomment_maps = 0
+nnoremap <silent> t :TComment<CR>j
+vnoremap <silent> t :TComment<CR>
 
+call plug#end()
 
 if has('nvim')
     set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
@@ -61,9 +66,12 @@ end
 let g:airline#extensions#tmuxline#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
-let g:airline_theme = 'onedark'
 let g:airline#extensions#branch#enabled = 1
-
+" let g:airline_theme = 'onedark'
+let g:airline_theme = 'codedark'
+let g:codedark_conservative=0
+let g:codedark_italics=1
+let g:codedark_transparent=1
 
 
 " LSP configuration
@@ -80,7 +88,13 @@ cmp.setup({
   },
   mapping = {
     -- Tab immediately completes. C-n/C-p to select.
-    ['<Tab>'] = cmp.mapping.confirm({ select = true })
+    ['<Tab>'] = cmp.mapping.confirm({ select = true }),
+    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-e>'] = cmp.mapping.abort(),
+    ["<C-k>"] = cmp.mapping.select_prev_item(),
+    ["<C-j>"] = cmp.mapping.select_next_item(),
   },
   sources = cmp.config.sources({
     -- TODO: currently snippets from lsp end up getting prioritized -- stop that!
@@ -210,10 +224,19 @@ set encoding=utf-8
 " Ignore case when searching unless upper case is used
 set ignorecase
 set smartcase
-
+set number
+set autoindent
+set cursorline
+set expandtab
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set scrolloff=5
 
 " Background on preview color
-highlight Pmenu ctermbg=darkblue guibg=darkblue
+" highlight Pmenu ctermbg=darkblue guibg=darkblue
+" Colors
+colorscheme codedark
 
 " backup
 set backup
@@ -242,6 +265,7 @@ source $DOTFILES_HOME/dotfiles/vim/fzf.vim
 " Hop bindings
 nnoremap <silent> <leader>w :HopWord<CR>
 nnoremap <silent> <leader>d :HopLine<CR>
+
 
 
 " No arrow keys --- force yourself to use the home row
