@@ -35,6 +35,9 @@ window:
 
   dynamic_title: true
 
+  # background opacity
+  opacity: 1.0
+
 
 # Display tabs using this many cells (changes require restart)
 # tabspaces: 8
@@ -179,8 +182,6 @@ colors:
 #   animation: EaseOutExpo
 #   duration: 0
 
-# Background opacity
-background_opacity: 1.0
 
 # Mouse bindings
 #

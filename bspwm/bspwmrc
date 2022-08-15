@@ -7,9 +7,9 @@ setbg
 dunst &
 # nm-applet &
 xrdb ~/.Xresources &
-picom -b &
-# compton &
-#xwallpaper --zoom ~/.config/wall.png &
+# picom -b &
+compton &
+# xwallpaper --zoom ~/.config/wall.png &
 flameshot &
 killall "launchlemon"
 ~/.config/polybar/launch.sh &

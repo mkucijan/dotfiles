@@ -1,7 +1,5 @@
 " Fzf search and destroy
 
-source $DOTFILES_HOME/dotfiles/vim/functions.vim
-
 " {{{ Project-wide search
 
 let g:search_ignore_dirs = ['.git', 'node_modules']
@@ -20,26 +18,13 @@ endif
 command -nargs=* -bang -complete=file Grep call <SID>execute_search("Grep", <q-args>, <bang>0)
 command -nargs=* -bang -complete=file GrepFzf call <SID>execute_search("GrepFzf", <q-args>, <bang>0)
 
-" :grep + grepprg + quickfix list
-nnoremap <F7><F7> :call <SID>prepare_search_command("", "Grep")<CR>
-nnoremap <F7>w :call <SID>prepare_search_command("word", "Grep")<CR>
-nnoremap <F7>s :call <SID>prepare_search_command("selection", "Grep")<CR>
-nnoremap <F7>/ :call <SID>prepare_search_command("search", "Grep")<CR>
-vnoremap <silent> <F7> :call <SID>prepare_search_command("selection", "Grep")<CR>
-
-" ctrlsf.vim (uses ack, ag or rg under the hood)
-nnoremap <S-F7><F7> :call <SID>prepare_search_command("", "GrepSF")<CR>
-nnoremap <S-F7>w :call <SID>prepare_search_command("word", "GrepSF")<CR>
-nnoremap <S-F7>s :call <SID>prepare_search_command("selection", "GrepSF")<CR>
-nnoremap <S-F7>/ :call <SID>prepare_search_command("search", "GrepSF")<CR>
-vnoremap <silent> <S-F7> :call <SID>prepare_search_command("selection", "GrepSF")<CR>
-
 " fzf-vim + ripgrep
-nnoremap <leader><F7><F7> :call <SID>prepare_search_command("", "GrepFzf")<CR>
-nnoremap <leader><F7>w :call <SID>prepare_search_command("word", "GrepFzf")<CR>
-nnoremap <leader><F7>s :call <SID>prepare_search_command("selection", "GrepFzf")<CR>
-nnoremap <leader><F7>/ :call <SID>prepare_search_command("search", "GrepFzf")<CR>
-vnoremap <silent> <leader><F7> :call <SID>prepare_search_command("selection", "GrepFzf")<CR>
+nnoremap <silent> <leader>s :call <SID>prepare_search_command("", "GrepFzf")<CR>
+nnoremap <silent> <leader>ss :call <SID>prepare_search_command("", "GrepFzf")<CR>
+nnoremap <silent> <leader>sw :call <SID>prepare_search_command("word", "GrepFzf")<CR>
+nnoremap <leader>sf :call <SID>prepare_search_command("selection", "GrepFzf")<CR>
+nnoremap <leader>s/ :call <SID>prepare_search_command("search", "GrepFzf")<CR>
+" vnoremap <silent> <leader>s :call <SID>prepare_search_command("selection", "GrepFzf")<CR>
 
 " fzf command
 noremap <A-c> :call fzf#vim#commands()<CR>
@@ -196,7 +181,9 @@ endfunction
 
 " PLUGIN: fzf.vim{{{
 
-let g:fzf_layout = { 'down': '~40%' }
+"let g:fzf_layout = { 'down': '~40%' }
+let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.5, 'highlight': 'Comment' } }
+
 
 " Populate quickfix list with selected files
 function! s:build_quickfix_list(lines)
@@ -230,6 +217,9 @@ command! -nargs=? -bang -complete=dir FzfFiles
 " Mappings
 nnoremap <silent> <leader>o :FzfFiles<CR>
 nnoremap <silent> <leader>O :FzfFiles!<CR>
+nnoremap <silent> <leader>p :FzfFiles %:p:h<CR>
+nnoremap <silent> <leader>P :FzfFiles! %:p:h<CR>
+nnoremap <silent> <leader>p :FzfFiles %:p:h<CR>
 cnoremap <silent> <C-p>  :FzfHistory:<CR>
 cnoremap <silent> <C-_> <ESC>:FzfHistory/<CR>
 nnoremap <silent> <leader>b  :FzfBuffers<CR>

@@ -27,3 +27,7 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 
 sxhkd &
 exec ssh-agent dbus-launch bspwm
+
+export XDG_CURRENT_DESKTOP=GNOME-Classic:GNOME
+export GNOME_SHELL_SESSION_MODE=classic
+exec gnome-session
