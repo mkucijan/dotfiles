@@ -183,6 +183,13 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 END
 
 
+" rust
+let g:rustfmt_autosave = 1
+let g:rustfmt_emit_files = 1
+let g:rustfmt_fail_silently = 0
+let g:rust_clip_command = 'xclip -selection clipboard'
+
+
 " Completion
 " Better completion
 " menuone: popup even when there's only one match
@@ -200,6 +207,13 @@ set updatetime=300
 " # Editor settings
 " =============================================================================
 set encoding=utf-8
+" Ignore case when searching unless upper case is used
+set ignorecase
+set smartcase
+
+
+" Background on preview color
+highlight Pmenu ctermbg=darkblue guibg=darkblue
 
 " backup
 set backup
