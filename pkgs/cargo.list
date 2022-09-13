@@ -4,6 +4,8 @@ cargo-edit
 cargo-expand
 cargo-generate
 cargo-inspect
+cargo-insta
+cargo-nextest
 cargo-outdated
 cargo-sweep
 cargo-tarpaulin
@@ -16,6 +18,7 @@ cross
 dbcrossbar
 diesel_cli
 diesel_cli_ext
+difftastic
 dirscan
 drill
 dua-cli

@@ -16,11 +16,21 @@ Plug 'https://github.com/vim-airline/vim-airline-themes'
 "Plug 'https://github.com/joshdick/onedark.vim'
 Plug 'tomasiser/vim-code-dark'
 
+" Windows
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+Plug 'kyazdani42/nvim-web-devicons'
+Plug 'kyazdani42/nvim-tree.lua'
+
+" Util
+Plug 'airblade/vim-rooter'
+Plug 'folke/trouble.nvim'
+Plug 'j-hui/fidget.nvim'
 
 " Fuzzy finder
-Plug 'airblade/vim-rooter'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
+" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+" Plug 'junegunn/fzf.vim'
 
 " Semantic language support
 Plug 'neovim/nvim-lspconfig'
@@ -31,6 +41,7 @@ Plug 'hrsh7th/nvim-cmp', {'branch': 'main'}
 Plug 'ray-x/lsp_signature.nvim'
 Plug 'gfanto/fzf-lsp.nvim'
 Plug 'nvim-lua/plenary.nvim'
+Plug 'lvimuser/lsp-inlayhints.nvim'
 
 " Only because nvim-cmp _requires_ snippets
 Plug 'hrsh7th/cmp-vsnip', {'branch': 'main'}
@@ -43,10 +54,19 @@ Plug 'stephpy/vim-yaml'
 Plug 'rust-lang/rust.vim'
 Plug 'rhysd/vim-clang-format'
 Plug 'godlygeek/tabular'
-Plug 'plasticboy/vim-markdown'
+" Plug 'plasticboy/vim-markdown'
 
 " git
 Plug 'https://github.com/tpope/vim-fugitive'
+
+" treesitter
+Plug 'nvim-treesitter/nvim-treesitter'
+
+" debugger
+Plug 'mfussenegger/nvim-dap'
+
+" terminal
+Plug 'akinsho/toggleterm.nvim', {'tag' : 'v2.*'}
 
 " Comment line(s) using t key
 Plug 'tomtom/tcomment_vim'
@@ -87,14 +107,22 @@ cmp.setup({
     end,
   },
   mapping = {
-    -- Tab immediately completes. C-n/C-p to select.
-    ['<Tab>'] = cmp.mapping.confirm({ select = true }),
-    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-p>'] = cmp.mapping.select_prev_item(),
+    ['<C-n>'] = cmp.mapping.select_next_item(),
+    ['<C-k>'] = cmp.mapping.select_prev_item(),
+    ['<C-j>'] = cmp.mapping.select_next_item(),
+    ['<C-g>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping.complete(),
-    ['<C-e>'] = cmp.mapping.abort(),
-    ["<C-k>"] = cmp.mapping.select_prev_item(),
-    ["<C-j>"] = cmp.mapping.select_next_item(),
+    ['<space-c>'] = cmp.mapping.complete(),
+    ['<C-e>'] = cmp.mapping.close(),
+    ['<Tab>'] = cmp.mapping.confirm({
+      behavior = cmp.ConfirmBehavior.Insert,
+      select = false,
+    }),
+    ['<CR>'] = cmp.mapping.confirm({
+      behavior = cmp.ConfirmBehavior.Insert,
+      select = true,
+    })
   },
   sources = cmp.config.sources({
     -- TODO: currently snippets from lsp end up getting prioritized -- stop that!
@@ -102,6 +130,23 @@ cmp.setup({
   }, {
     { name = 'path' },
   }),
+  window = {
+      completion = cmp.config.window.bordered(),
+      documentation = cmp.config.window.bordered(),
+  },
+  formatting = {
+      fields = {'menu', 'abbr', 'kind'},
+      format = function(entry, item)
+          local menu_icon ={
+              nvim_lsp = 'λ',
+              vsnip = '',
+              buffer = 'Ω',
+              path = '',
+          }
+          item.menu = menu_icon[entry.source.name]
+          return item
+      end,
+  },
   experimental = {
     ghost_text = true,
   },
@@ -113,6 +158,9 @@ cmp.setup.cmdline(':', {
     { name = 'path' }
   })
 })
+
+-- inlay hints
+require("lsp-inlayhints").setup()
 
 -- Setup lspconfig.
 local on_attach = function(client, bufnr)
@@ -148,6 +196,11 @@ local on_attach = function(client, bufnr)
       border = "none"
     },
   })
+
+  -- inlay hints
+  require("lsp-inlayhints").on_attach(client, bufnr)
+  buf_set_keymap('n', '<F2>', ":lua require'lsp-inlayhints'.toggle()<CR>", opts)
+  buf_set_keymap('n', '<c-h>', ":lua require'lsp-inlayhints'.toggle()<CR>", opts)
 end
 
 -- setup fzf lsp
@@ -162,22 +215,25 @@ lspconfig.rust_analyzer.setup {
   },
   settings = {
     ["rust-analyzer"] = {
+      checkOnSave = {
+         command = "clippy"
+      },
       procMacro = {
         enable = true
       },
       imports = {
-	granularity = {
-          group = "module",
-	},
-	prefix = "self",
+        granularity = {
+              group = "module",
+        },
+        prefix = "self",
       },
       cargo = {
         allFeatures = true,
       },
       completion = {
-	postfix = {
-	  enable = false,
-	},
+        postfix = {
+          enable = false,
+        },
       },
     },
   },
@@ -194,6 +250,147 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
     update_in_insert = true,
   }
 )
+
+-- treesitter
+require('nvim-treesitter.configs').setup {
+  ensure_installed = { "lua", "rust", "toml" },
+  auto_install = true,
+  highlight = {
+    enable = true,
+    additional_vim_regex_highlighting=false,
+  },
+  ident = { enable = true }, 
+  rainbow = {
+    enable = true,
+    extended_mode = true,
+    max_file_lines = nil,
+  }
+}
+
+
+-- file tree
+require("nvim-tree").setup({
+  sort_by = "case_sensitive",
+  view = {
+    adaptive_size = true,
+    mappings = {
+      list = {
+      },
+    },
+  },
+  renderer = {
+    group_empty = true,
+  },
+  filters = {
+    dotfiles = true,
+  },
+})
+-- NVIM TREE KEY MAPPINGS
+vim.api.nvim_set_keymap('n', '<F3>', ':NvimTreeToggle<CR>', { noremap = false, silent = true })
+vim.api.nvim_set_keymap('n', '<F4>', ':NvimTreeFindFileToggle<CR>', { noremap = false, silent = true })
+
+
+-- telescope
+require('telescope').setup {
+  defaults = {
+    mappings = {
+      i = {
+      ["<C-j>"] = "move_selection_next",
+      ["<C-k>"] = "move_selection_previous",
+      }
+    }
+  },
+  pickers = {
+    buffers = {
+      show_all_buffers = true,
+      sort_lastused = true,
+      theme = "dropdown",
+      previewer = false,
+      mappings = {
+        i = {
+          ["<c-d>"] = "delete_buffer",
+        }
+      }
+
+    }
+  },
+  extensions = {
+    fzf = {
+      fuzzy = true,                    -- false will only do exact matching
+      override_generic_sorter = true,  -- override the generic sorter
+      override_file_sorter = true,     -- override the file sorter
+      case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
+                                       -- the default case_mode is "smart_case"
+    }
+  }
+}
+-- To get fzf loaded and working with telescope, you need to call
+-- load_extension, somewhere after setup function:
+require('telescope').load_extension('fzf')
+
+
+-- highlights
+require("trouble").setup {
+-- your configuration comes here
+-- or leave it empty to use the default settings
+-- refer to the configuration section below
+}
+
+-- progress icon 
+require"fidget".setup{
+  align = {
+    bottom = false,            -- align fidgets along bottom edge of buffer
+    right = true,             -- align fidgets along right edge of buffer
+  },
+}
+
+
+-- debugger
+local dap = require('dap')
+dap.adapters.lldb = {
+  type = 'executable',
+  command = '/usr/bin/lldb-vscode', -- adjust as needed, must be absolute path
+  name = 'lldb'
+}
+
+dap.configurations.rust = {
+  {
+    name = 'Launch',
+    type = 'lldb',
+    request = 'launch',
+    program = function()
+      return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+    end,
+    cwd = '${workspaceFolder}',
+    stopOnEntry = false,
+    args = {},
+
+    -- 💀
+    -- if you change `runInTerminal` to true, you might need to change the yama/ptrace_scope setting:
+    --
+    --    echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope
+    --
+    -- Otherwise you might get the following error:
+    --
+    --    Error on launch: Failed to attach to the target process
+    --
+    -- But you should be aware of the implications:
+    -- https://www.kernel.org/doc/html/latest/admin-guide/LSM/Yama.html
+    -- runInTerminal = false,
+  },
+}
+
+dap.configurations.c = dap.configurations.rust
+dap.configurations.cpp = dap.configurations.rust
+
+-- terminal
+require("toggleterm").setup{
+  open_mapping = [[<c-Tab>]],
+  hide_numbers = true
+}
+-- vim.api.nvim_set_keymap('n', '<c-Tab>', ':ToggleTerm<CR>', { noremap = false, silent = true })
+
+
 END
 
 
@@ -232,6 +429,7 @@ set tabstop=4
 set softtabstop=4
 set shiftwidth=4
 set scrolloff=5
+set mouse=n
 
 " Background on preview color
 " highlight Pmenu ctermbg=darkblue guibg=darkblue
@@ -251,21 +449,44 @@ set directory=$DOTFILES_HOME/.vim/swap//,/tmp
 " Copy paste
 map <C-c> "+y<CR>
 
-" Open new file adjacent to current file
-nnoremap <leader>o :e <C-R>=expand("%:p:h") . "/" <CR>
-
 
 " =============================================================================
 " # Keyboard shortcuts
 " =============================================================================
 
 " Fzf search and destroy
-source $DOTFILES_HOME/dotfiles/vim/fzf.vim
+" source $DOTFILES_HOME/dotfiles/vim/fzf.vim
+" Find files using Telescope command-line sugar.
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>g <cmd>Telescope live_grep<cr>
+nnoremap <leader>b <cmd>Telescope buffers<cr>
+nnoremap <leader>fc <cmd>Telescope help_tags<cr>
+nnoremap <leader>fw <cmd>Telescope grep_string<cr>
+
 
 " Hop bindings
 nnoremap <silent> <leader>w :HopWord<CR>
 nnoremap <silent> <leader>d :HopLine<CR>
 
+
+" trouble highlight bindings
+nnoremap <leader>mm <cmd>TroubleToggle<cr>
+nnoremap <leader>mw <cmd>TroubleToggle workspace_diagnostics<cr>
+nnoremap <leader>md <cmd>TroubleToggle document_diagnostics<cr>
+nnoremap <leader>mq <cmd>TroubleToggle quickfix<cr>
+nnoremap <leader>ml <cmd>TroubleToggle loclist<cr>
+noremap gR <cmd>TroubleToggle lsp_references<cr>
+
+
+" Terminal bindings
+autocmd TermEnter term://*toggleterm#*
+      \ tnoremap <silent><c-t> <Cmd>exe v:count1 . "ToggleTerm"<CR>
+
+" By applying the mappings this way you can pass a count to your
+" mapping to open a specific window.
+" For example: 2<C-t> will open terminal 2
+nnoremap <silent><c-t> <Cmd>exe v:count1 . "ToggleTerm"<CR>
+inoremap <silent><c-t> <Esc><Cmd>exe v:count1 . "ToggleTerm"<CR>
 
 
 " No arrow keys --- force yourself to use the home row
