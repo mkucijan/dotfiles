@@ -6,7 +6,7 @@ call plug#begin()
 
 " VIM enhancements
 Plug 'ciaranm/securemodelines'
-Plug 'phaazon/hop.nvim', {'branch': 'v2'}
+Plug 'ggandor/leap.nvim'
 
 
 " GUI
@@ -207,7 +207,7 @@ end
 require'fzf_lsp'.setup()
 
 -- rust analyzer
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 lspconfig.rust_analyzer.setup {
   on_attach = on_attach,
   flags = {
@@ -240,8 +240,8 @@ lspconfig.rust_analyzer.setup {
   capabilities = capabilities,
 }
 
--- hop
-require('hop').setup{}
+-- leap
+require('leap').add_default_mappings()
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics, {
@@ -258,6 +258,7 @@ require('nvim-treesitter.configs').setup {
   highlight = {
     enable = true,
     additional_vim_regex_highlighting=false,
+    disable = { "c", "rust" }
   },
   ident = { enable = true }, 
   rainbow = {
@@ -305,6 +306,9 @@ require('telescope').setup {
       show_all_buffers = true,
       sort_lastused = true,
       theme = "dropdown",
+      layout_config = {
+        width = 0.5
+      },
       previewer = false,
       mappings = {
         i = {
