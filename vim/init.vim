@@ -468,11 +468,6 @@ nnoremap <leader>fc <cmd>Telescope help_tags<cr>
 nnoremap <leader>fw <cmd>Telescope grep_string<cr>
 
 
-" Hop bindings
-nnoremap <silent> <leader>w :HopWord<CR>
-nnoremap <silent> <leader>d :HopLine<CR>
-
-
 " trouble highlight bindings
 nnoremap <leader>mm <cmd>TroubleToggle<cr>
 nnoremap <leader>mw <cmd>TroubleToggle workspace_diagnostics<cr>
