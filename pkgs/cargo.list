@@ -2,6 +2,7 @@ bat
 cargo-asm
 cargo-edit
 cargo-expand
+cargo-cleanall
 cargo-deny
 cargo-generate
 cargo-inspect
