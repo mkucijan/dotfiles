@@ -19,8 +19,8 @@ window:
   # Falls back to size specified by window manager if set to 0x0.
   # (changes require restart)
   dimensions:
-    columns: 160
-    lines: 48
+    columns: 120
+    lines: 38
 
   # Adds this many blank pixels of padding around the window
   # Units are physical pixels; this is not DPI aware.
@@ -84,7 +84,7 @@ font:
     # style: Italic
 
   # Point size of the font
-  size: 10.0
+  size: 8.0
 
   # Offset is the extra space around each character. offset.y can be thought of
   # as modifying the linespacing, and offset.x as modifying the letter spacing.
@@ -176,7 +176,6 @@ colors:
 # visual_bell:
 #   animation: EaseOutExpo
 #   duration: 0
-
 
 # Mouse bindings
 #
