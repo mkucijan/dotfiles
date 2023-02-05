@@ -60,7 +60,7 @@ Plug 'godlygeek/tabular'
 Plug 'https://github.com/tpope/vim-fugitive'
 
 " treesitter
-Plug 'nvim-treesitter/nvim-treesitter'
+" Plug 'nvim-treesitter/nvim-treesitter'
 
 " debugger
 Plug 'mfussenegger/nvim-dap'
@@ -151,6 +151,8 @@ cmp.setup({
     ghost_text = true,
   },
 })
+require'lspconfig'.sqlls.setup{}
+
 
 -- Enable completing paths in :
 cmp.setup.cmdline(':', {
@@ -252,21 +254,21 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 )
 
 -- treesitter
-require('nvim-treesitter.configs').setup {
-  ensure_installed = { "lua", "rust", "toml" },
-  auto_install = true,
-  highlight = {
-    enable = true,
-    additional_vim_regex_highlighting=false,
-    disable = { "c", "rust" }
-  },
-  ident = { enable = true }, 
-  rainbow = {
-    enable = true,
-    extended_mode = true,
-    max_file_lines = nil,
-  }
-}
+--   require('nvim-treesitter.configs').setup {
+--     ensure_installed = { "lua", "rust", "toml" },
+--     auto_install = true,
+--     highlight = {
+--       enable = true,
+--       additional_vim_regex_highlighting=false,
+--       disable = { "c", "rust" }
+--     },
+--     ident = { enable = true },
+--     rainbow = {
+--       enable = true,
+--       extended_mode = true,
+--       max_file_lines = nil,
+--     }
+--   }
 
 
 -- file tree

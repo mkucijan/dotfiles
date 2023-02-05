@@ -54,6 +54,7 @@ export PATH="$PYENV_ROOT/bin:$PATH"
 # eval "$(pyenv init --path)"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
+export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 
 # export WORKON_HOME=$HOME/.virtualenvs
 # source /usr/bin/virtualenvwrapper.sh
