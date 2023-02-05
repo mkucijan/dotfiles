@@ -29,8 +29,8 @@ Plug 'folke/trouble.nvim'
 Plug 'j-hui/fidget.nvim'
 
 " Fuzzy finder
-" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-" Plug 'junegunn/fzf.vim'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 
 " Semantic language support
 Plug 'neovim/nvim-lspconfig'
@@ -40,7 +40,6 @@ Plug 'hrsh7th/cmp-path', {'branch': 'main'}
 Plug 'hrsh7th/nvim-cmp', {'branch': 'main'}
 Plug 'ray-x/lsp_signature.nvim'
 Plug 'gfanto/fzf-lsp.nvim'
-Plug 'nvim-lua/plenary.nvim'
 Plug 'lvimuser/lsp-inlayhints.nvim'
 
 " Only because nvim-cmp _requires_ snippets
@@ -461,7 +460,7 @@ map <C-c> "+y<CR>
 " =============================================================================
 
 " Fzf search and destroy
-" source $DOTFILES_HOME/dotfiles/vim/fzf.vim
+source $DOTFILES_HOME/dotfiles/vim/fzf.vim
 " Find files using Telescope command-line sugar.
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>g <cmd>Telescope live_grep<cr>
