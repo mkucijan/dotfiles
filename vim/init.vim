@@ -4,6 +4,8 @@ let mapleader = "\<space>"
 
 call plug#begin()
 
+" Plug 'github/copilot.vim'
+
 " VIM enhancements
 Plug 'ciaranm/securemodelines'
 Plug 'ggandor/leap.nvim'
@@ -26,7 +28,7 @@ Plug 'kyazdani42/nvim-tree.lua'
 " Util
 Plug 'airblade/vim-rooter'
 Plug 'folke/trouble.nvim'
-Plug 'j-hui/fidget.nvim'
+Plug 'j-hui/fidget.nvim', { 'tag': 'legacy' }
 
 " Fuzzy finder
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -112,12 +114,12 @@ cmp.setup({
     ['<C-j>'] = cmp.mapping.select_next_item(),
     ['<C-g>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<space-c>'] = cmp.mapping.complete(),
+    ['<C-Space>'] = cmp.mapping.complete(),
     ['<C-e>'] = cmp.mapping.close(),
-    ['<Tab>'] = cmp.mapping.confirm({
-      behavior = cmp.ConfirmBehavior.Insert,
-      select = false,
-    }),
+    -- ['<Tab>'] = cmp.mapping.confirm({
+    --   behavior = cmp.ConfirmBehavior.Insert,
+    --   select = false,
+    -- }),
     ['<CR>'] = cmp.mapping.confirm({
       behavior = cmp.ConfirmBehavior.Insert,
       select = true,
@@ -126,8 +128,9 @@ cmp.setup({
   sources = cmp.config.sources({
     -- TODO: currently snippets from lsp end up getting prioritized -- stop that!
     { name = 'nvim_lsp' },
+    { name = 'vsnip' }, -- For vsnip users.
   }, {
-    { name = 'path' },
+    { name = 'buffer' },
   }),
   window = {
       completion = cmp.config.window.bordered(),
@@ -150,13 +153,43 @@ cmp.setup({
     ghost_text = true,
   },
 })
-require'lspconfig'.sqlls.setup{}
 
 
--- Enable completing paths in :
+-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+-- cmp.setup.cmdline(':', {
+--   mapping = cmp.mapping.preset.cmdline(),
+--   sources = cmp.config.sources({
+--         { name = 'path' }
+--     }, {
+--         { name = 'cmdline' }
+--     })
+-- })
 cmp.setup.cmdline(':', {
-  sources = cmp.config.sources({
-    { name = 'path' }
+  sources = {
+    {
+      name = 'cmdline',
+      option = {
+        ignore_cmds = {}
+      }
+    }
+  } 
+})
+
+
+-- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
+-- cmp.setup.cmdline({ '/', '?' }, {
+--   mapping = cmp.mapping.preset.cmdline(),
+--   sources = {
+--     { name = 'buffer' }
+--   }
+-- })
+
+-- Set configuration for specific filetype.
+cmp.setup.filetype('gitcommit', {
+sources = cmp.config.sources({
+    { name = 'git' }, -- You can specify the `git` source if [you were installed it](https://github.com/petertriho/cmp-git).
+  }, {
+    { name = 'buffer' },
   })
 })
 
@@ -240,6 +273,38 @@ lspconfig.rust_analyzer.setup {
   },
   capabilities = capabilities,
 }
+-- lsp sql
+lspconfig.sqlls.setup{
+  on_attach = on_attach,
+  capabilities = capabilities,
+}
+-- lsp python
+lspconfig.pyright.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+}
+-- lsp js/ts
+lspconfig.tsserver.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+}
+
+-- `clangd`.
+lspconfig.clangd.setup {
+  capabilities = capabilities,
+}
+
+-- lsp haskell
+lspconfig.hls.setup{
+  filetypes = { 'haskell', 'lhaskell', 'cabal' },
+  capabilities = capabilities,
+  haskell = {
+    cabalFormattingProvider = "cabalfmt",
+    formattingProvider = "ormolu"
+  }
+}
+
+
 
 -- leap
 require('leap').add_default_mappings()
@@ -275,10 +340,6 @@ require("nvim-tree").setup({
   sort_by = "case_sensitive",
   view = {
     adaptive_size = true,
-    mappings = {
-      list = {
-      },
-    },
   },
   renderer = {
     group_empty = true,
