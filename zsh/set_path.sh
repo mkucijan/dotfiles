@@ -1,7 +1,7 @@
 
 
 # local
-export PATH=$PATH:$DOTFILES_HOME/.local/bin
+export PATH=$DOTFILES_HOME/.local/bin:$PATH
 # desktop scripts
 export PATH=$PATH:$DOTFILES_HOME/.local/bin/desktop
 # util scripts
