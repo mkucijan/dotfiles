@@ -11,10 +11,12 @@
 if [ -f "${XDG_CONFIG_HOME:-$HOME/dotfiles}/zsh/set_path.sh" ]; then
     . "${XDG_CONFIG_HOME:-$HOME/dotfiles}/zsh/set_path.sh"
 fi
-eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh,gpg)
-# export $(gnome-keyring-daemon --start --components=pkcs11,secrets,ssh,gpg)
+#source /etc/X11/xinit/xinitrc.d/*
+eval $(/usr/bin/gnome-keyring-daemon --start --daemonize --components=pkcs11,secrets,ssh,gpg)
+# export $(gnome-keyring-daemon --start --daemonize --components=pkcs11,secrets,ssh,gpg)
 # dbus-update-activation-environment --systemd DISPLAY
 export SSH_AUTH_SOCK
+export GNOME_KEYRING_CONTROL
 
 source /etc/X11/xinit/xinitrc.d/50-systemd-user.sh
 

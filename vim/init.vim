@@ -4,7 +4,7 @@ let mapleader = "\<space>"
 
 call plug#begin()
 
-" Plug 'github/copilot.vim'
+Plug 'github/copilot.vim'
 
 " VIM enhancements
 Plug 'ciaranm/securemodelines'
