@@ -13,6 +13,7 @@ cargo-outdated
 cargo-sweep
 cargo-tarpaulin
 cargo-tree
+cargo-udeps
 cargo-update
 cargo-watch
 cargo-web
