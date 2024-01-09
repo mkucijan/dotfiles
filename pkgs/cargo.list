@@ -26,6 +26,7 @@ difftastic
 dirscan
 drill
 dua-cli
+evcxr_jupyter
 exa
 fd-find
 flamegraph
@@ -37,6 +38,7 @@ jql
 jwtinfo
 kubie
 leftwm
+leptosfmt
 lolcate-rs
 lsd
 movine

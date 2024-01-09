@@ -1,6 +1,6 @@
-cursor_style = "Block"
-custom_cursor_colors = false
-hide_cursor_when_typing = false
+# cursor_style = "Block"
+# custom_cursor_colors = false
+# hide_cursor_when_typing = false
 live_config_reload = true
 
 [colors]
@@ -554,18 +554,18 @@ chars = "\u001B[24;3~"
 key = "F12"
 mods = "Super"
 
-[mouse]
-faux_scrollback_lines = 1
+# [mouse]
+# faux_scrollback_lines = 1
 
 [[mouse.bindings]]
 action = "PasteSelection"
 mouse = "Middle"
 
-[mouse.double_click]
-threshold = 300
+# [mouse.double_click]
+# threshold = 300
 
-[mouse.triple_click]
-threshold = 300
+# [mouse.triple_click]
+# threshold = 300
 
 [selection]
 semantic_escape_chars = ",│`|:\"' ()[]{}<>"
