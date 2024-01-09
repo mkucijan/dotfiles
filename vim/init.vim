@@ -253,7 +253,15 @@ lspconfig.rust_analyzer.setup {
          command = "clippy"
       },
       procMacro = {
-        enable = true
+        enable = true,
+        ignored = {
+            leptos_macro = {
+                -- optional: --
+                -- "component",
+                "server",
+            },
+        },
+
       },
       imports = {
         granularity = {
@@ -456,6 +464,34 @@ require("toggleterm").setup{
 }
 -- vim.api.nvim_set_keymap('n', '<c-Tab>', ':ToggleTerm<CR>', { noremap = false, silent = true })
 
+
+local lsp_or_leptos = function()
+	-- Handle to the current buffer
+	local filetype = vim.filetype.match({ buf = 0 })
+	if filetype == "rust" then
+		-- Get all lines within the buffer
+		local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+		local probably_leptos_project = false
+		-- true if any line contains "leptos"
+		for _, line in ipairs(lines) do
+			if line:match("leptos") then
+				probably_leptos_project = true
+			end
+		end
+
+		if probably_leptos_project == true then
+			vim.cmd.write() -- Write the buffer,
+
+			-- remove 'silent' if you want to see errors and all that.
+			vim.cmd([[silent !leptosfmt % -t 2]]) -- '%' expands to [path to current buffer]
+			vim.notify("Formatted with leptosfmt!", vim.log.levels.INFO)
+			return
+		end
+	end
+	vim.lsp.buf.format()
+end
+
+vim.keymap.set("n", "<leader>'", lsp_or_leptos)
 
 END
 
