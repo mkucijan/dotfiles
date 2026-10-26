@@ -1,0 +1,17 @@
+{{- /* chezmoi:modify-template */ -}}
+{{- /* Grok rewrites this file itself, so chezmoi only enforces a few keys and keeps the rest. No secrets here. */ -}}
+{{- $cur := dict -}}
+{{- if .chezmoi.stdin }}{{ $cur = fromToml .chezmoi.stdin }}{{ end -}}
+{{- $cli := get $cur "cli" | default dict -}}
+{{- $_ := set $cli "use_leader" true -}}
+{{- $_ := set $cli "auto_update" (ne .role "phone") -}}
+{{- $_ := set $cur "cli" $cli -}}
+{{- $mk := get $cur "marketplace" | default dict -}}
+{{- if not (hasKey $mk "sources") -}}
+{{-   $_ := set $mk "sources" (list (dict "name" "xAI Official" "git" "https://github.com/xai-org/plugin-marketplace.git")) -}}
+{{- end -}}
+{{- $_ := set $cur "marketplace" $mk -}}
+{{- $ui := get $cur "ui" | default dict -}}
+{{- if not (hasKey $ui "permission_mode") }}{{ $_ := set $ui "permission_mode" "auto" }}{{ end -}}
+{{- $_ := set $cur "ui" $ui -}}
+{{ toToml $cur }}

@@ -1,0 +1,44 @@
+# ~/.config/mise/config.toml — managed by chezmoi
+[settings]
+experimental = true
+lockfile = true
+# rust stays on rustup; python envs via uv
+disable_backends = ["asdf"]
+
+[tools]
+chezmoi  = "latest"
+starship = "latest"
+fzf      = "latest"
+ripgrep  = "latest"
+fd       = "latest"
+bat      = "latest"
+eza      = "latest"
+zoxide   = "latest"
+delta    = "latest"
+lazygit  = "latest"
+jq       = "latest"
+{{- if not .termux }}
+neovim   = "0.12"
+atuin    = "latest"
+uv       = "latest"
+{{- end }}
+{{- if eq .role "desktop" }}
+node     = "lts"
+python   = "3.13"
+pnpm     = "latest"
+btop     = { version = "latest", os = ["linux"] }
+dust     = "latest"
+xh       = "latest"
+tealdeer = "latest"
+{{- end }}
+
+[env]
+EDITOR = "nvim"
+
+[tasks.up]
+description = "Update dotfiles, tools and nvim plugins"
+run = ["chezmoi update --apply", "mise upgrade --bump=false", "nvim --headless '+Lazy! sync' +qa"]
+
+[tasks.doctor]
+description = "Health check of the terminal setup"
+run = ["mise doctor", "chezmoi doctor", "zsh -i -c 'zmodload zsh/zprof; exit' && hyperfine -N --warmup 2 'zsh -i -c exit' 2>/dev/null || time zsh -i -c exit"]

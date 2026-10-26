@@ -1,0 +1,43 @@
+name: bootstrap
+on:
+  push: { branches: [main, modern] }
+  pull_request:
+  workflow_dispatch:
+jobs:
+  linux:
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [ubuntu-latest, ubuntu-24.04-arm]
+        image: ["debian:trixie", "archlinux:latest"]
+        exclude:
+          - runner: ubuntu-24.04-arm
+            image: "archlinux:latest"   # no official arm64 Arch image
+    runs-on: ${{ matrix.runner }}
+    container: ${{ matrix.image }}
+    steps:
+      - name: prereqs
+        run: |
+          if command -v pacman >/dev/null; then pacman -Sy --noconfirm git curl; else apt-get update -qq && apt-get install -yqq git curl ca-certificates; fi
+      - uses: actions/checkout@v4
+      - name: install.sh
+        env: { DOTFILES_SRC: "${{ github.workspace }}", DOTFILES_ROLE: server, GITHUB_TOKEN: "${{ github.token }}" }
+        run: sh install.sh
+      - name: verify
+        shell: bash
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"; eval "$(mise activate bash)"
+          chezmoi verify --source "$GITHUB_WORKSPACE"
+          start=$(date +%s%N); zsh -i -c exit; echo "zsh startup: $(( ($(date +%s%N)-start)/1000000 )) ms"
+          tmux -f ~/.config/tmux/tmux.conf new-session -d -s ci && tmux kill-server
+          nvim --headless +qa
+          mise doctor || true
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sh install.sh
+        env: { DOTFILES_SRC: "${{ github.workspace }}", DOTFILES_ROLE: desktop, NO_PKGS: "1", GITHUB_TOKEN: "${{ github.token }}" }
+      - run: |
+          export PATH="$HOME/.local/bin:$PATH"; eval "$(mise activate bash)"
+          zsh -i -c exit && nvim --headless +qa

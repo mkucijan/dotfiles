@@ -1,0 +1,3 @@
+{{- if stat (joinPath .chezmoi.homeDir ".ssh/id_ed25519.pub") -}}
+mkucijan@gmail.com {{ include (joinPath .chezmoi.homeDir ".ssh/id_ed25519.pub") | trim }}
+{{ end -}}

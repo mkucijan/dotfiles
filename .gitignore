@@ -1,4 +1,10 @@
 .DS_Store
 *.swp
 tags
-tmux/plugins/
+/zsh
+/tmux
+/vim
+/alacritty
+/starship/
+legacy/tmux/tpm/
+legacy/tmux/plugins/

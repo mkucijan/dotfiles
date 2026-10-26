@@ -1,0 +1,9 @@
+{{- $role := "server" -}}
+{{- if eq .chezmoi.os "android" -}}{{ $role = "phone" }}
+{{- else if eq .chezmoi.os "darwin" -}}{{ $role = "desktop" }}
+{{- else if eq .chezmoi.hostname "arch" -}}{{ $role = "desktop" }}
+{{- end -}}
+{{- $role = promptStringOnce . "role" "Role (desktop/server/phone)" $role -}}
+[data]
+role = {{ $role | quote }}
+termux = {{ contains "com.termux" (env "PREFIX") }}
