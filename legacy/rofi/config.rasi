@@ -1,7 +1,0 @@
-configuration {
-	modi: "run,drun,window,ssh,filebrowser";
-	font: "Menlo for Powerline 14";
-	matching: "fuzzy";
-	hide-scrollbar: true;
-}
-@theme "slate.rasi"

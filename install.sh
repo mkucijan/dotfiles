@@ -12,7 +12,7 @@ log "platform: $OS/$(uname -m)"
 if [ "${NO_PKGS:-0}" != 1 ]; then
   log "base packages"
   case $OS in
-    termux) pkg install -y git zsh tmux curl mise neovim atuin ;;
+    termux) pkg install -y git zsh tmux curl mise neovim atuin gh ;;
     macos)  command -v brew >/dev/null || NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
             brew install git zsh tmux ;;
     linux)  if command -v pacman >/dev/null; then $SUDO pacman -S --needed --noconfirm git zsh tmux curl base-devel

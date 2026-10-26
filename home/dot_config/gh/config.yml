@@ -1,0 +1,11 @@
+# gh CLI settings (managed by chezmoi). Auth lives in hosts.yml / keyring and is never tracked.
+version: 1
+git_protocol: https
+editor: nvim
+prompt: enabled
+pager:
+aliases:
+    co: pr checkout
+    prs: pr list --author "@me"
+http_unix_socket:
+browser:
