@@ -13,7 +13,7 @@ if [ -f "${XDG_CONFIG_HOME:-$HOME/dotfiles}/zsh/set_path.sh" ]; then
 fi
 eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh,gpg)
 # export $(gnome-keyring-daemon --start --components=pkcs11,secrets,ssh,gpg)
-# dbus-update-activation-environment --systemd DISPLAY
+dbus-update-activation-environment --systemd DISPLAY
 export SSH_AUTH_SOCK
 
 source /etc/X11/xinit/xinitrc.d/50-systemd-user.sh
@@ -25,8 +25,8 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 
 # exec ssh-agent dbus-launch leftwm
 
-sxhkd &
-exec ssh-agent dbus-launch bspwm
+#sxhkd &
+#exec dbus-launch bspwm
 
 export XDG_CURRENT_DESKTOP=GNOME-Classic:GNOME
 export GNOME_SHELL_SESSION_MODE=classic
