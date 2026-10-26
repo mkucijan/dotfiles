@@ -37,3 +37,29 @@ install -m 600 /dev/null ~/.config/hindsight/api_key && $EDITOR ~/.config/hindsi
 hindsight memory recall "$HINDSIGHT_BANK" "test"
 chezmoi apply   # enables the hindsight MCP server in ~/.grok/config.toml (bearer_token_file)
 ```
+
+## Secrets: Bitwarden (opt-in)
+
+Secrets never live in this repo. chezmoi reads them from Bitwarden only when **all** of these hold: `use_bitwarden = true` in `~/.config/chezmoi/chezmoi.toml`, `bw` is installed (mise; npm build on Termux) and `BW_SESSION` is set. Otherwise the secret files are left as they are (manual fallback) and `chezmoi apply` still succeeds.
+
+One-time setup:
+
+1. Create a free account at https://vault.bitwarden.com (or bitwarden.eu).
+2. Import passwords: export from Google Password Manager (passwords.google.com → Settings → Export, gives a CSV), then in the Bitwarden web vault: Tools → Import data → format "Chrome (csv)". **Delete the CSV afterwards** (`shred -u Google\ Passwords.csv`, empty the trash/Downloads).
+3. Add items named exactly as below (password field = the secret).
+4. On each device:
+   ```sh
+   bw login                      # once per device (email + master password + 2FA)
+   bwu                           # = export BW_SESSION="$(bw unlock --raw)"; bw sync
+   chezmoi init --promptBool use_bitwarden=true   # or edit chezmoi.toml data
+   mise run secrets              # or: chezmoi apply
+   bwl                           # lock again when done
+   ```
+
+Item naming convention (one Login item per secret, lowercase, password field holds the value):
+
+| Bitwarden item | Written to | Used by |
+|---|---|---|
+| `hindsight` | `~/.config/hindsight/api_key` (0600) | `hindsight` CLI (`HINDSIGHT_API_KEY`), Grok MCP `bearer_token_file` |
+
+Add new ones by copying `home/dot_config/private_hindsight/modify_private_api_key`.

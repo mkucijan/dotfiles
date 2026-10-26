@@ -48,6 +48,28 @@ checksum_source = "mise-versions"
 url = "https://github.com/sharkdp/bat/releases/download/v0.26.1/bat-v0.26.1-aarch64-apple-darwin.tar.gz"
 url_api = "https://api.github.com/repos/sharkdp/bat/releases/assets/323548442"
 
+[[tools.bitwarden]]
+version = "2026.10.0"
+backend = "aqua:bitwarden/clients"
+specifiers = ["2026.10.0"]
+
+[tools.bitwarden."platforms.linux-arm64"]
+checksum = "sha256:2fe9d8a18dc4c35ea2f9e3e42a4021f14f129ef47e80b6cea1e3b34176f1583a"
+checksum_source = "mise-versions"
+url = "https://github.com/bitwarden/clients/releases/download/cli-v2026.10.0/bw-linux-arm64-2026.10.0.zip"
+url_api = "https://api.github.com/repos/bitwarden/clients/releases/assets/644458240"
+
+[tools.bitwarden."platforms.linux-x64"]
+checksum = "sha256:269b67559caab860d1737f7554b32bdb8be9285d5689fee55193c137a0df9973"
+url = "https://github.com/bitwarden/clients/releases/download/cli-v2026.10.0/bw-linux-2026.10.0.zip"
+url_api = "https://api.github.com/repos/bitwarden/clients/releases/assets/644458067"
+
+[tools.bitwarden."platforms.macos-arm64"]
+checksum = "sha256:062c880508678b8d936ab2522a3a1e92d60f52b5c534e71406e9b47329e95207"
+checksum_source = "mise-versions"
+url = "https://github.com/bitwarden/clients/releases/download/cli-v2026.10.0/bw-macos-arm64-2026.10.0.zip"
+url_api = "https://api.github.com/repos/bitwarden/clients/releases/assets/644457665"
+
 [[tools.btop]]
 version = "1.4.8"
 backend = "aqua:aristocratos/btop"

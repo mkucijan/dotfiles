@@ -69,6 +69,10 @@ has starship && _cache_eval starship starship init zsh
 [[ -r $ZPLUG/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && source $ZPLUG/zsh-autosuggestions/zsh-autosuggestions.zsh && bindkey '^E' autosuggest-accept
 [[ -r $ZPLUG/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && source $ZPLUG/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
+# Bitwarden: unlock once per shell; chezmoi templates read secrets only while BW_SESSION is set
+bwu() { export BW_SESSION="$(bw unlock --raw)" && bw sync -q && echo "bitwarden unlocked" }
+bwl() { bw lock >/dev/null; unset BW_SESSION }
+
 # installers that insist on editing rc files: put their lines here (untracked)
 [[ -r $ZDOTDIR/local.zsh ]] && source $ZDOTDIR/local.zsh
 unfunction has
