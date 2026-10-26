@@ -1,5 +1,8 @@
 #!/bin/sh
-# re-run when mise config/lock changes
+# mise rewrites mise.lock itself, so chezmoi only seeds it (create_) and re-copies the repo
+# version here whenever the repo's config or lock changes.
 # config: {{ include "dot_config/mise/config.toml.tmpl" | sha256sum }}
+# lock:   {{ include "dot_config/mise/create_mise.lock" | sha256sum }}
+cp "{{ .chezmoi.sourceDir }}/dot_config/mise/create_mise.lock" "$HOME/.config/mise/mise.lock"
 command -v mise >/dev/null 2>&1 || exit 0
 mise install --yes || echo "mise install had failures (see above); continuing"
