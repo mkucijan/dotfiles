@@ -27,3 +27,13 @@ DOTFILES_SRC=$PWD DOTFILES_ROLE=server sh install.sh
 | `$ZDOTDIR/local.zsh`, `~/.config/tmux/local.conf`, `~/.config/git/local` | untracked per-machine overrides |
 
 Secrets never go in this repo. `~/.grok/config.toml` is merged (modify template), so Grok can keep writing to it.
+
+## Hindsight (memory)
+
+`hindsight` CLI is pinned in mise (`github:vectorize-io/hindsight`), with a `cloud` profile pointing at Hindsight Cloud and `HINDSIGHT_BANK=personal`. Put the API key in an untracked file once per device:
+
+```sh
+install -m 600 /dev/null ~/.config/hindsight/api_key && $EDITOR ~/.config/hindsight/api_key
+hindsight memory recall "$HINDSIGHT_BANK" "test"
+chezmoi apply   # enables the hindsight MCP server in ~/.grok/config.toml (bearer_token_file)
+```

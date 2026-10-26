@@ -220,6 +220,29 @@ url = "https://github.com/cli/cli/releases/download/v2.103.2/gh_2.103.2_macOS_ar
 url_api = "https://api.github.com/repos/cli/cli/releases/assets/670305145"
 provenance = "github-attestations"
 
+[[tools."github:vectorize-io/hindsight"]]
+version = "1.1.0"
+backend = "github:vectorize-io/hindsight"
+specifiers = ["1.1.0"]
+
+[tools."github:vectorize-io/hindsight"."platforms.linux-arm64"]
+checksum = "sha256:5bea4704fb027826c809754f86a1c25562b009db5423f51d419a53e03c635471"
+checksum_source = "mise-versions"
+url = "https://github.com/vectorize-io/hindsight/releases/download/v1.1.0/hindsight-linux-arm64"
+url_api = "https://api.github.com/repos/vectorize-io/hindsight/releases/assets/663151533"
+
+[tools."github:vectorize-io/hindsight"."platforms.linux-x64"]
+checksum = "sha256:6ab6f55912b336a029a0f0dd8de4d76fe6ca0ac131b1b49061d1191ec93a662a"
+checksum_source = "mise-versions"
+url = "https://github.com/vectorize-io/hindsight/releases/download/v1.1.0/hindsight-linux-amd64"
+url_api = "https://api.github.com/repos/vectorize-io/hindsight/releases/assets/663151523"
+
+[tools."github:vectorize-io/hindsight"."platforms.macos-arm64"]
+checksum = "sha256:13ca91dd8142daeb66c4be3c0486b6f0d20e530b8909b7328879c452a2d5565d"
+checksum_source = "mise-versions"
+url = "https://github.com/vectorize-io/hindsight/releases/download/v1.1.0/hindsight-darwin-arm64"
+url_api = "https://api.github.com/repos/vectorize-io/hindsight/releases/assets/663151530"
+
 [[tools.jq]]
 version = "1.8.2"
 backend = "aqua:jqlang/jq"

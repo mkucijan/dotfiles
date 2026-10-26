@@ -14,4 +14,10 @@
 {{- $ui := get $cur "ui" | default dict -}}
 {{- if not (hasKey $ui "permission_mode") }}{{ $_ := set $ui "permission_mode" "auto" }}{{ end -}}
 {{- $_ := set $cur "ui" $ui -}}
+{{- /* Hindsight memory MCP: token read from an untracked file, never committed */ -}}
+{{- $mcp := get $cur "mcp_servers" | default dict -}}
+{{- $hs := get $mcp "hindsight" | default (dict "url" "https://api.hindsight.vectorize.io/mcp/personal/" "bearer_token_file" "~/.config/hindsight/api_key") -}}
+{{- $_ := set $hs "enabled" (stat (joinPath .chezmoi.homeDir ".config/hindsight/api_key") | not | not) -}}
+{{- $_ := set $mcp "hindsight" $hs -}}
+{{- $_ := set $cur "mcp_servers" $mcp -}}
 {{ toToml $cur }}

@@ -9,3 +9,7 @@ export EDITOR=nvim VISUAL=nvim PAGER="less" BAT_PAGER="less -R"
 [[ -d /opt/android-studio/jbr ]] && export JAVA_HOME=/opt/android-studio/jbr
 [[ -d $HOME/Android/Sdk ]] && export ANDROID_HOME="$HOME/Android/Sdk"
 {{- end }}
+
+# Hindsight (memory): cloud profile + default bank; API key from an untracked 0600 file
+export HINDSIGHT_PROFILE=cloud HINDSIGHT_BANK=personal
+[[ -r $XDG_CONFIG_HOME/hindsight/api_key ]] && export HINDSIGHT_API_KEY="$(<$XDG_CONFIG_HOME/hindsight/api_key)"
