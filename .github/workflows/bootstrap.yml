@@ -27,7 +27,8 @@ jobs:
         shell: bash
         run: |
           export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
-          chezmoi verify --source "$GITHUB_WORKSPACE"
+          chezmoi apply --source "$GITHUB_WORKSPACE"   # 2nd pass: templates lookPath tools that mise just installed
+          chezmoi verify --source "$GITHUB_WORKSPACE" || { chezmoi diff --source "$GITHUB_WORKSPACE"; exit 1; }
           start=$(date +%s%N); zsh -i -c exit; echo "zsh startup: $(( ($(date +%s%N)-start)/1000000 )) ms"
           tmux -f ~/.config/tmux/tmux.conf new-session -d -s ci && tmux kill-server
           nvim --headless +qa
