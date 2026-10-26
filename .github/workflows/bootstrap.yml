@@ -26,7 +26,7 @@ jobs:
       - name: verify
         shell: bash
         run: |
-          export PATH="$HOME/.local/bin:$PATH"; eval "$(mise activate bash)"
+          export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
           chezmoi verify --source "$GITHUB_WORKSPACE"
           start=$(date +%s%N); zsh -i -c exit; echo "zsh startup: $(( ($(date +%s%N)-start)/1000000 )) ms"
           tmux -f ~/.config/tmux/tmux.conf new-session -d -s ci && tmux kill-server
@@ -39,5 +39,5 @@ jobs:
       - run: sh install.sh
         env: { DOTFILES_SRC: "${{ github.workspace }}", DOTFILES_ROLE: desktop, NO_PKGS: "1", GITHUB_TOKEN: "${{ github.token }}" }
       - run: |
-          export PATH="$HOME/.local/bin:$PATH"; eval "$(mise activate bash)"
+          export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
           zsh -i -c exit && nvim --headless +qa
