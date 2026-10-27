@@ -18,7 +18,22 @@ _cache_eval() { # name cmd...
 }
 
 # tools: mise first so its shims/PATH feed the rest
+{{- if .profile.dev }}
+# dev: full activation (per-directory tool versions via hook-env on cd/prompt)
 if has mise; then _cache_eval mise mise activate zsh; fi
+{{- else }}
+# base: global tools only, so skip mise's prompt hook (one `mise hook-env` costs ~0.3 s on a Pi).
+# Cache `mise env` and rebuild it when the config, lock or installed tool set changes.
+if has mise; then () {
+  setopt local_options extended_glob
+  local f=$ZCACHE/mise-env.zsh m=$XDG_DATA_HOME/mise/installs
+  local -a deps=($XDG_CONFIG_HOME/mise/config.toml(N) $XDG_CONFIG_HOME/mise/mise.lock(N) $m(N/) $m/*(N/) ${commands[mise]})
+  local d stale=0; [[ -s $f ]] || stale=1
+  for d in $deps; do [[ $d -nt $f ]] && { stale=1; break }; done
+  (( stale )) && (cd ~ && mise env -s zsh) >| $f 2>/dev/null
+  source $f
+}; fi
+{{- end }}
 # $EDITOR/$VISUAL = the real nvim binary, never the mise shim (a shim costs a mise exec per launch)
 () { local nv=${commands[nvim]}
   [[ $nv == */shims/* ]] && has mise && nv=$(mise which nvim 2>/dev/null)
@@ -64,14 +79,17 @@ if has fd; then
   export FZF_DEFAULT_COMMAND="fd --type f --type l $FD_OPTIONS"
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND" FZF_ALT_C_COMMAND="fd --type d $FD_OPTIONS"
 fi
-has fzf      && _cache_eval fzf fzf --zsh
 has zoxide   && _cache_eval zoxide zoxide init zsh
-has atuin    && _cache_eval atuin atuin init zsh
 has starship && _cache_eval starship starship init zsh
+# line-editor integrations only when zle is active (no tty, e.g. `zsh -i -c`, has none)
+if [[ -o zle && -t 0 && -t 1 ]]; then
+  has fzf   && _cache_eval fzf fzf --zsh
+  has atuin && _cache_eval atuin atuin init zsh
 
-# plugins (cloned by chezmoi externals)
-[[ -r $ZPLUG/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && source $ZPLUG/zsh-autosuggestions/zsh-autosuggestions.zsh && bindkey '^E' autosuggest-accept
-[[ -r $ZPLUG/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && source $ZPLUG/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+  # plugins (cloned by chezmoi externals)
+  [[ -r $ZPLUG/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && source $ZPLUG/zsh-autosuggestions/zsh-autosuggestions.zsh && bindkey '^E' autosuggest-accept
+  [[ -r $ZPLUG/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && source $ZPLUG/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
 
 # Bitwarden personal vault (bw): unlock once per shell. Machine secrets use bws (mise run secrets).
 bwu() { export BW_SESSION="$(bw unlock --raw)" && bw sync -q && echo "bitwarden unlocked" }
