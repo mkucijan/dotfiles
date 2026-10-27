@@ -19,6 +19,10 @@ _cache_eval() { # name cmd...
 
 # tools: mise first so its shims/PATH feed the rest
 if has mise; then _cache_eval mise mise activate zsh; fi
+# $EDITOR/$VISUAL = the real nvim binary, never the mise shim (a shim costs a mise exec per launch)
+() { local nv=${commands[nvim]}
+  [[ $nv == */shims/* ]] && has mise && nv=$(mise which nvim 2>/dev/null)
+  export EDITOR=${nv:-nvim} VISUAL=${nv:-nvim} }
 
 # completions: one compinit, cached dump, generated completions in $ZCACHE/completions
 fpath=("$ZCACHE/completions" "$HOME/.grok/completions/zsh" $fpath)

@@ -12,7 +12,7 @@ jobs:
           - { runner: ubuntu-latest,    image: "debian:trixie",    profiles: "base" }
           - { runner: ubuntu-24.04-arm, image: "debian:trixie",    profiles: "base" }        # Pi-like
           - { runner: ubuntu-24.04-arm, image: "debian:trixie",    profiles: "base dev agent" }
-          - { runner: ubuntu-latest,    image: "archlinux:latest", profiles: "base dev agent ui" }
+          - { runner: ubuntu-latest,    image: "archlinux:latest", profiles: "base dev rust agent ui" }
     name: linux (${{ matrix.image }}, ${{ matrix.runner }}, ${{ matrix.profiles }})
     runs-on: ${{ matrix.runner }}
     container: ${{ matrix.image }}

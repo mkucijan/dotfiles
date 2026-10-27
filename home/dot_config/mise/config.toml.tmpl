@@ -2,7 +2,7 @@
 [settings]
 experimental = true
 lockfile = true
-# python envs via uv; rust (dev) via mise rust backend (rustup underneath)
+# python envs via uv; rust (rust profile) via mise rust backend (rustup underneath)
 disable_backends = ["asdf"]
 
 [tools]
@@ -39,7 +39,6 @@ python     = "latest"
 uv         = "latest"
 pnpm       = "latest"
 go         = "latest"
-rust       = { version = "stable", components = "rust-analyzer,rustfmt,clippy" }
 tree-sitter = "latest"
 "aqua:LuaLS/lua-language-server" = "latest"
 stylua     = "latest"
@@ -52,6 +51,11 @@ shfmt      = "latest"
 "npm:bash-language-server" = "latest"
 xh         = "latest"
 tealdeer   = "latest"
+{{- end }}
+{{- if .profile.rust }}
+
+# ---- rust: rustup toolchain (~1.5 GB, slow on ARM SBCs), opt-in ----
+rust       = { version = "stable", components = "rust-analyzer,rustfmt,clippy" }
 {{- end }}
 {{- if .profile.agent }}
 

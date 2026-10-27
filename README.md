@@ -15,11 +15,12 @@ Install is split into stackable profiles. `base` is always on; add others space-
 | Profile | What it adds | Typical hosts |
 |---|---|---|
 | `base` | zsh + starship/atuin/zoxide/fzf, tmux, core CLI (rg, fd, bat, eza, delta, lazygit, jq, dust, btop), git + gh, `bw`/`bws` + `secrets-sync`, `~/.ssh/config.d/tailnet`. Neovim as `$EDITOR` with **zero plugins** (shared core options/keymaps, netrw, builtin `:find`/`:grep`) | Pi, Termux, servers |
-| `dev` | full Neovim plugin set (lazy.nvim, blink.cmp, treesitter, conform, fzf-lua, oil...) on top of the same core; built-in LSP; toolchains + LSPs/formatters via mise: node, python + uv, pnpm, go, rust (rust-analyzer), tree-sitter, lua-language-server, stylua, ruff, shellcheck, shfmt, pyright, typescript(-language-server), bash-language-server, xh, tealdeer; `build-essential`/`base-devel` | arch, macOS, dev boxes |
+| `dev` | full Neovim plugin set (lazy.nvim, blink.cmp, treesitter, conform, fzf-lua, oil...) on top of the same core; built-in LSP; toolchains + LSPs/formatters via mise: node, python + uv, pnpm, go, tree-sitter, lua-language-server, stylua, ruff, shellcheck, shfmt, pyright, typescript(-language-server), bash-language-server, xh, tealdeer; `build-essential`/`base-devel` | arch, macOS, dev boxes |
+| `rust` | Rust via rustup through mise (stable + rust-analyzer, rustfmt, clippy). Opt-in because it is ~1.5 GB and slow to install on ARM boards; `DOTFILES_RUST=1` is a shortcut for adding it | arch, macOS |
 | `agent` | AI CLIs from `home/.chezmoidata/agents.toml` (now: Grok CLI) + their config (`~/.grok/config.toml` merged, Hindsight MCP), `hindsight` CLI | anywhere you run agents |
 | `ui` | Alacritty config, tmux open-URL binding; packages: alacritty, JetBrains Mono Nerd font, Bitwarden desktop (pacman / brew casks; Debian: alacritty + font only) | arch, macOS |
 
-Defaults: arch and macOS get `base dev agent ui`, everything else `base`. Legacy `DOTFILES_ROLE` still works (`server`/`phone` -> `base`, `desktop` -> all four).
+Defaults: arch and macOS get `base dev rust agent ui`, everything else `base`. Legacy `DOTFILES_ROLE` still works (`server`/`phone` -> `base`, `desktop` -> all five).
 The choice is stored in `~/.config/chezmoi/chezmoi.toml` (`profiles = "..."`); change it later with
 `DOTFILES_PROFILES="base dev" chezmoi init --apply` (or re-run `install.sh` with the env var).
 
