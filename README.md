@@ -72,3 +72,13 @@ Add a secret: create it in bws, then add an entry to `home/.chezmoidata/secrets.
 ## SSH client config
 
 chezmoi manages `~/.ssh/config.d/tailnet` using Tailscale MagicDNS names — **MagicDNS must be enabled on each device** (arch on port 2222 — port 22 there is Tailscale SSH for the browser terminal only — plus rpi, pixel, pixel7 and `Host *` defaults). Your own `~/.ssh/config` is **not** overwritten: a modify script keeps `Include config.d/*` as the first line (creating the file if absent, idempotent), so local entries survive (first match wins in ssh, so a local `Host` block after the Include can't override a managed one; put overrides in another `config.d/` file sorted before `tailnet`). Keys and `known_hosts` are never tracked.
+
+## Adding a new device
+
+Every device follows the same standard:
+
+1. **Join the tailnet** with MagicDNS on (`tailscale up --accept-dns`); its MagicDNS name is the SSH HostName.
+2. **OpenSSH with key auth on port 2222 alongside 22**: `/etc/ssh/sshd_config.d/10-ports.conf` with `Port 22` + `Port 2222` and `PasswordAuthentication no`. Termux/Android uses its sshd on **8022**. Tailscale SSH (port 22 via tailscale) stays only as the browser-terminal backup.
+3. **Authorize keys**: add the box's and arch's `~/.ssh/id_ed25519.pub` to the device's `~/.ssh/authorized_keys`.
+4. **Add a `Host` entry** to `home/private_dot_ssh/private_config.d/tailnet` (→ `~/.ssh/config.d/tailnet`) and push.
+5. **Secrets**: create a bws machine token for it, save to `~/.config/bws/token` (0600), run `mise run secrets`; if it needs AWS, create scoped `aws-<host>-access-key-id` / `aws-<host>-secret-access-key` (never the `kuc` admin keys).
