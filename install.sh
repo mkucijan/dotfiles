@@ -34,7 +34,7 @@ if [ "${NO_PKGS:-0}" != 1 ]; then
             has_p rust && pkg install -y rust
             true ;;
     macos)  command -v brew >/dev/null || NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-            brew install git zsh tmux
+            brew install git zsh tmux eza   # eza has no macOS aqua asset; brew is the prebuilt path
             has_p ui && { brew install --cask alacritty font-jetbrains-mono-nerd-font bitwarden || log "some casks failed"; }
             true ;;
     linux)  if command -v pacman >/dev/null; then

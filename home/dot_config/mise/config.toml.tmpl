@@ -3,26 +3,26 @@
 experimental = true
 lockfile = true
 # python envs via uv; rust (rust profile) via mise rust backend (rustup underneath)
-disable_backends = ["asdf"]
+disable_backends = ["asdf", "cargo"]  # never compile from source; use aqua/github/core prebuilts only
 
 [tools]
 # ---- base: shell + core CLI (also on the Pi / Termux) ----
 chezmoi  = "latest"
-starship = "latest"
-fzf      = "latest"
-ripgrep  = "latest"
-fd       = "latest"
-bat      = "latest"
-eza      = { version = "latest", os = ["linux"] }   # no macOS release binary
-zoxide   = "latest"
-delta    = "latest"
+starship = { version = "latest", backend = "aqua:starship/starship" }
+fzf      = { version = "latest", backend = "aqua:junegunn/fzf" }
+ripgrep  = { version = "latest", backend = "aqua:BurntSushi/ripgrep" }
+fd       = { version = "latest", backend = "aqua:sharkdp/fd" }
+bat      = { version = "latest", backend = "aqua:sharkdp/bat" }
+eza      = { version = "latest", backend = "aqua:eza-community/eza", os = ["linux"] }  # no macOS release; brew on macOS (install.sh)
+zoxide   = { version = "latest", backend = "aqua:ajeetdsouza/zoxide" }
+delta    = { version = "latest", backend = "aqua:dandavison/delta" }
 lazygit  = "latest"
 jq       = "latest"
-dust     = "latest"
+dust     = { version = "latest", backend = "aqua:bootandy/dust" }
 {{- if not .termux }}
 neovim   = "latest"
 gh       = "latest"
-atuin    = "latest"
+atuin    = { version = "latest", backend = "aqua:atuinsh/atuin" }
 btop     = { version = "latest", os = ["linux"] }
 bitwarden = "latest"   # bw CLI (personal vault only; not used by the secrets flow)
 "github:bitwarden/sdk-sm" = { version = "latest", version_prefix = "bws-v", bin = "bws" }   # Secrets Manager CLI
@@ -36,21 +36,21 @@ bitwarden = "latest"   # bw CLI (personal vault only; not used by the secrets fl
 # ---- dev: toolchains, LSPs, formatters (nvim enables LSPs only if the binary exists) ----
 node       = "lts"
 python     = "latest"
-uv         = "latest"
+uv         = { version = "latest", backend = "aqua:astral-sh/uv" }
 pnpm       = "latest"
 go         = "latest"
 tree-sitter = "latest"
 "aqua:LuaLS/lua-language-server" = "latest"
-stylua     = "latest"
-ruff       = "latest"
+stylua     = { version = "latest", backend = "aqua:JohnnyMorganz/StyLua" }
+ruff       = { version = "latest", backend = "aqua:astral-sh/ruff" }
 shellcheck = "latest"
 shfmt      = "latest"
 "npm:pyright" = "latest"
 "npm:typescript" = "latest"
 "npm:typescript-language-server" = "latest"
 "npm:bash-language-server" = "latest"
-xh         = "latest"
-tealdeer   = "latest"
+xh         = { version = "latest", backend = "aqua:ducaale/xh" }
+tealdeer   = { version = "latest", backend = "aqua:tealdeer-rs/tealdeer" }
 {{- end }}
 {{- if .profile.rust }}
 

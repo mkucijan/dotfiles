@@ -8,6 +8,24 @@ Cross-platform terminal setup (zsh, tmux, Neovim, git, mise tools) for Arch, Deb
 - Neovim: Lua + lazy.nvim (`lazy-lock.json`), built-in LSP enabled only for servers that are installed.
 - The old setup (bspwm/polybar/rofi rice, old zsh/tmux/vim/alacritty configs, deploy scripts, package lists) is **not** on `main` anymore: it is preserved at tag [`legacy-2024`](https://github.com/mkucijan/dotfiles/tree/legacy-2024). Bring pieces back as needed with `git show legacy-2024:<path>`.
 
+## Tool backends (no cargo builds)
+
+Every CLI in mise is a **prebuilt binary** (aqua / github / core / vfox / npm). The cargo backend is disabled (`disable_backends = ["asdf", "cargo"]`), so a missing asset fails loudly instead of compiling. `base` and `dev` never need a Rust toolchain; only the opt-in `rust` profile runs rustup.
+
+| Tool | Backend | linux-x64 | linux-arm64 | macos-arm64 | Notes |
+|---|---|---|---|---|---|
+| starship, atuin, bat, fd, ripgrep, dust, zoxide, delta | aqua | yes | yes | yes | Rust CLIs, prebuilt |
+| eza | aqua | yes | yes | **no** | no darwin release; `brew install eza` on macOS (`install.sh`) |
+| btop | aqua | yes | yes | **no** | linux-only (`os = ["linux"]`) |
+| stylua, ruff, uv, xh, tealdeer | aqua | yes | yes | yes | `dev` |
+| chezmoi, gh, fzf, jq, lazygit, shellcheck, shfmt, pnpm, tree-sitter, lua-language-server | aqua | yes | yes | yes | |
+| neovim | vfox | yes | yes | yes | |
+| bitwarden (bw), bws (`github:bitwarden/sdk-sm`), hindsight | aqua / github | yes | yes | yes | Termux: bw via npm; **bws has no Android build** → `cargo install bws` or skip |
+| node, python, go | core | yes | yes | yes | `dev` |
+| rust | core (rustup) | yes | yes | yes | **`rust` profile only** |
+
+Termux / android-arm64: many aqua glibc binaries do not run on bionic; Termux packages or npm are preferred where noted.
+
 ## Profiles
 
 Install is split into stackable profiles. `base` is always on; add others space-separated.
