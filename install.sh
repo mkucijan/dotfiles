@@ -35,6 +35,9 @@ fi
 
 log "tools (mise install)"
 mise install --yes || log "some tools failed; rerun 'mise install'"
+# re-render templates that depend on tools installed just now (e.g. lookPath "gh" in git config)
+log "chezmoi re-apply"
+mise exec chezmoi@latest -- chezmoi apply || log "chezmoi apply failed; rerun it"
 export PATH="${MISE_DATA_DIR:-$HOME/.local/share/mise}/shims:$PATH"
 command -v nvim >/dev/null 2>&1 && { log "nvim plugins"; nvim --headless '+Lazy! restore' +qa >/dev/null 2>&1 || true; }
 
