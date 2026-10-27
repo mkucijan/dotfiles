@@ -265,6 +265,30 @@ checksum_source = "mise-versions"
 url = "https://github.com/vectorize-io/hindsight/releases/download/v1.1.0/hindsight-darwin-arm64"
 url_api = "https://api.github.com/repos/vectorize-io/hindsight/releases/assets/663151530"
 
+[[tools."github:bitwarden/sdk-sm"]]
+version = "2.1.0"
+backend = "github:bitwarden/sdk-sm"
+
+[tools."github:bitwarden/sdk-sm".options]
+version_prefix = "bws-v"
+
+[tools."github:bitwarden/sdk-sm"."platforms.linux-arm64"]
+checksum = "sha256:18253757286e119d450133a87eb463bf8c1ce418ce24c834f4f250d60cba6f9e"
+checksum_source = "mise-versions"
+url = "https://github.com/bitwarden/sdk-sm/releases/download/bws-v2.1.0/bws-aarch64-unknown-linux-gnu-2.1.0.zip"
+url_api = "https://api.github.com/repos/bitwarden/sdk-sm/releases/assets/426507287"
+
+[tools."github:bitwarden/sdk-sm"."platforms.linux-x64"]
+checksum = "sha256:ba8233c3a4aee5d43e3c73bbd04d99e9bc5aba13bbbfd06d89b073abe732b860"
+url = "https://github.com/bitwarden/sdk-sm/releases/download/bws-v2.1.0/bws-x86_64-unknown-linux-gnu-2.1.0.zip"
+url_api = "https://api.github.com/repos/bitwarden/sdk-sm/releases/assets/426507282"
+
+[tools."github:bitwarden/sdk-sm"."platforms.macos-arm64"]
+checksum = "sha256:9cb1c1c6e6164d83b2e339883ba02b4cbb37188ce9a484b1ce8249443163e066"
+checksum_source = "mise-versions"
+url = "https://github.com/bitwarden/sdk-sm/releases/download/bws-v2.1.0/bws-aarch64-apple-darwin-2.1.0.zip"
+url_api = "https://api.github.com/repos/bitwarden/sdk-sm/releases/assets/426507211"
+
 [[tools.jq]]
 version = "1.8.2"
 backend = "aqua:jqlang/jq"

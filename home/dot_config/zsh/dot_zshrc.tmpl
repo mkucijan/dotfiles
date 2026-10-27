@@ -69,7 +69,7 @@ has starship && _cache_eval starship starship init zsh
 [[ -r $ZPLUG/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && source $ZPLUG/zsh-autosuggestions/zsh-autosuggestions.zsh && bindkey '^E' autosuggest-accept
 [[ -r $ZPLUG/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && source $ZPLUG/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-# Bitwarden: unlock once per shell; chezmoi templates read secrets only while BW_SESSION is set
+# Bitwarden personal vault (bw): unlock once per shell. Machine secrets use bws (mise run secrets).
 bwu() { export BW_SESSION="$(bw unlock --raw)" && bw sync -q && echo "bitwarden unlocked" }
 bwl() { bw lock >/dev/null; unset BW_SESSION }
 

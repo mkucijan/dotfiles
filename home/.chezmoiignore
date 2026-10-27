@@ -8,3 +8,9 @@ README.md
 
 # gh auth tokens: never manage
 .config/gh/hosts.yml
+
+# secrets written by secrets-sync: never manage
+.config/bws
+.config/secrets
+.config/hindsight/api_key
+.aws

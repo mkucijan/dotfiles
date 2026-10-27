@@ -10,6 +10,9 @@ export EDITOR=nvim VISUAL=nvim PAGER="less" BAT_PAGER="less -R"
 [[ -d $HOME/Android/Sdk ]] && export ANDROID_HOME="$HOME/Android/Sdk"
 {{- end }}
 
+# Secrets from bws (secrets-sync): 0600, untracked
+[[ -r $XDG_CONFIG_HOME/secrets/env ]] && source $XDG_CONFIG_HOME/secrets/env
+
 # Hindsight (memory): cloud profile + default bank; API key from an untracked 0600 file
 export HINDSIGHT_PROFILE=cloud HINDSIGHT_BANK=personal
 [[ -r $XDG_CONFIG_HOME/hindsight/api_key ]] && export HINDSIGHT_API_KEY="$(<$XDG_CONFIG_HOME/hindsight/api_key)"

@@ -4,8 +4,6 @@
 {{- else if eq .chezmoi.hostname "arch" -}}{{ $role = "desktop" }}
 {{- end -}}
 {{- $role = promptStringOnce . "role" "Role (desktop/server/phone)" $role -}}
-{{- $bw := promptBoolOnce . "use_bitwarden" "Read secrets from Bitwarden (bw)" false }}
 [data]
-use_bitwarden = {{ $bw }}
 role = {{ $role | quote }}
 termux = {{ contains "com.termux" (env "PREFIX") }}

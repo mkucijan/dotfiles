@@ -20,13 +20,15 @@ jq       = "latest"
 {{- if not .termux }}
 neovim   = "0.12"
 gh       = "latest"
-bitwarden = "2026.10.0"   # bw CLI, native linux/macos x64+arm64
+bitwarden = "2026.10.0"   # bw CLI (personal vault only; not used by the secrets flow)
+"github:bitwarden/sdk-sm" = { version = "2.1.0", version_prefix = "bws-v", bin = "bws" }   # Secrets Manager CLI
 "github:vectorize-io/hindsight" = { version = "1.1.0", bin = "hindsight" }
 atuin    = "latest"
 uv       = "latest"
 {{- else }}
 # Termux: glibc bw binary does not run on bionic; use the npm build on pkg nodejs
 "npm:@bitwarden/cli" = "2026.10.0"
+# bws has no android build: `cargo install bws --locked` (pkg install rust) if needed
 {{- end }}
 {{- if eq .role "desktop" }}
 node     = "lts"
@@ -50,5 +52,5 @@ description = "Health check of the terminal setup"
 run = ["mise doctor", "chezmoi doctor", "zsh -i -c 'zmodload zsh/zprof; exit' && hyperfine -N --warmup 2 'zsh -i -c exit' 2>/dev/null || time zsh -i -c exit"]
 
 [tasks.secrets]
-description = "Apply secret-backed files from Bitwarden (needs BW_SESSION; run `bwu` first)"
-run = "test -n \"$BW_SESSION\" || { echo 'locked: run bwu (export BW_SESSION=$(bw unlock --raw))'; exit 1; }; bw sync -q; chezmoi apply ~/.config/hindsight/api_key ~/.grok/config.toml"
+description = "Pull secrets from Bitwarden Secrets Manager (bws) per .chezmoidata/secrets.toml"
+run = ["chezmoi apply ~/.local/bin/secrets-sync", "secrets-sync", "chezmoi apply ~/.grok/config.toml"]

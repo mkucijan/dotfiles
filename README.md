@@ -38,28 +38,33 @@ hindsight memory recall "$HINDSIGHT_BANK" "test"
 chezmoi apply   # enables the hindsight MCP server in ~/.grok/config.toml (bearer_token_file)
 ```
 
-## Secrets: Bitwarden (opt-in)
+## Secrets: Bitwarden Secrets Manager (bws)
 
-Secrets never live in this repo. chezmoi reads them from Bitwarden only when **all** of these hold: `use_bitwarden = true` in `~/.config/chezmoi/chezmoi.toml`, `bw` is installed (mise; npm build on Termux) and `BW_SESSION` is set. Otherwise the secret files are left as they are (manual fallback) and `chezmoi apply` still succeeds.
+Secret *values* never live in this repo. `home/.chezmoidata/secrets.toml` maps **bws secret keys -> local targets** (files, env vars, AWS profiles; `{host}` = hostname, optional `hosts`/`os` filters). chezmoi renders that into `~/.local/bin/secrets-sync`, which runs `bws secret list -o json | jq` and writes the targets with mode 0600. It reads the machine-account token from `$BWS_ACCESS_TOKEN` or `~/.config/bws/token` (0600, untracked). No token, no `bws`, or a missing secret: one-line notice, existing files kept, exit 0. Values are never printed.
 
-One-time setup:
+`bw` (personal vault) stays installed for your own passwords (`bwu`/`bwl`), but is **not** used by this flow.
 
-1. Create a free account at https://vault.bitwarden.com (or bitwarden.eu).
-2. Import passwords: export from Google Password Manager (passwords.google.com → Settings → Export, gives a CSV), then in the Bitwarden web vault: Tools → Import data → format "Chrome (csv)". **Delete the CSV afterwards** (`shred -u Google\ Passwords.csv`, empty the trash/Downloads).
-3. Add items named exactly as below (password field = the secret).
-4. On each device:
-   ```sh
-   bw login                      # once per device (email + master password + 2FA)
-   bwu                           # = export BW_SESSION="$(bw unlock --raw)"; bw sync
-   chezmoi init --promptBool use_bitwarden=true   # or edit chezmoi.toml data
-   mise run secrets              # or: chezmoi apply
-   bwl                           # lock again when done
-   ```
+Secret names to create in Secrets Manager (project `kuc`, readable by machine account `grok-bot` or a per-device one):
 
-Item naming convention (one Login item per secret, lowercase, password field holds the value):
-
-| Bitwarden item | Written to | Used by |
+| bws secret key | Written to | Used by |
 |---|---|---|
 | `hindsight` | `~/.config/hindsight/api_key` (0600) | `hindsight` CLI (`HINDSIGHT_API_KEY`), Grok MCP `bearer_token_file` |
+| `gh-token` | `GH_TOKEN` in `~/.config/secrets/env` (0600, sourced by zsh) | `gh` (`~/.config/gh/hosts.yml` stays untracked) |
+| `aws-<host>-access-key-id` + `aws-<host>-secret-access-key` | profile `[<host>]` in a marked block of `~/.aws/credentials` (0600; other profiles untouched) | AWS CLI/SDKs (`AWS_PROFILE=<host>`) |
 
-Add new ones by copying `home/dot_config/private_hindsight/modify_private_api_key`.
+AWS rule: the admin IAM user `kuc` keys stay on **arch only** and are never put in bws. Store only scoped, per-device IAM keys here.
+
+Per device:
+
+```sh
+mise install                                   # bws 2.1.0 (github:bitwarden/sdk-sm)
+install -Dm600 /dev/null ~/.config/bws/token   # then paste the machine-account token without echo:
+read -rs "T?bws token: " && printf %s "$T" > ~/.config/bws/token; unset T; echo
+mise run secrets                               # = secrets-sync + re-render ~/.grok/config.toml
+```
+
+Termux: bws has no Android build; `pkg install rust && cargo install bws --locked`, or keep the manual key files below.
+
+Manual fallback (no bws): `install -m 600 /dev/null ~/.config/hindsight/api_key && $EDITOR ~/.config/hindsight/api_key`.
+
+Add a secret: create it in bws, then add an entry to `home/.chezmoidata/secrets.toml`.
