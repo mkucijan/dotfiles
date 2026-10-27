@@ -12,7 +12,7 @@ if ! command -v tmux >/dev/null; then echo "SKIP tmux (not installed: NO_PKGS)";
 t=$(ms nvim --headless +qa) && ok "nvim --headless +qa ($t)" || bad nvim
 err=$(nvim --headless +qa 2>&1); [[ -z "$err" ]] && ok "nvim no startup output" || { bad "nvim output"; echo "$err" | head; }
 [[ "$(head -1 ~/.ssh/config)" == "Include config.d/*" ]] && ok "ssh config Include first" || bad "ssh Include"
-[[ "$(ssh -G arch 2>/dev/null | awk '/^port /{print $2}')" == 2222 ]] && ok "ssh -G arch port 2222" || bad "ssh -G arch"
+[[ "$(ssh -F "$HOME/.ssh/config" -G arch 2>/dev/null | awk '/^port /{print $2}')" == 2222 ]] && ok "ssh -G arch port 2222" || bad "ssh -G arch"
 for b in gh bws git zsh; do command -v $b >/dev/null && ok "$b present" || bad "$b missing"; done
 gh --version >/dev/null && bws --version >/dev/null && ok "gh/bws run" || bad "gh/bws run"
 secrets-sync >/dev/null 2>&1 && ok "secrets-sync without token exits 0" || bad "secrets-sync"
