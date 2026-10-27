@@ -35,7 +35,7 @@ Secrets never go in this repo. `~/.grok/config.toml` is merged (modify template)
 ```sh
 install -m 600 /dev/null ~/.config/hindsight/api_key && $EDITOR ~/.config/hindsight/api_key
 hindsight memory recall "$HINDSIGHT_BANK" "test"
-chezmoi apply   # enables the hindsight MCP server in ~/.grok/config.toml (bearer_token_file)
+chezmoi apply   # enables the hindsight MCP server in ~/.grok/config.toml (Authorization header filled from the key file at apply time)
 ```
 
 ## Secrets: Bitwarden Secrets Manager (bws)
@@ -48,7 +48,7 @@ Secret names to create in Secrets Manager (project `kuc`, readable by machine ac
 
 | bws secret key | Written to | Used by |
 |---|---|---|
-| `hindsight` | `~/.config/hindsight/api_key` (0600) | `hindsight` CLI (`HINDSIGHT_API_KEY`), Grok MCP `bearer_token_file` |
+| `hindsight` | `~/.config/hindsight/api_key` (0600) | `hindsight` CLI (`HINDSIGHT_API_KEY`), Grok MCP `Authorization` header |
 | `gh-token` | `GH_TOKEN` in `~/.config/secrets/env` (0600, sourced by zsh) | `gh` (`~/.config/gh/hosts.yml` stays untracked) |
 | `aws-<host>-access-key-id` + `aws-<host>-secret-access-key` | profile `[<host>]` in a marked block of `~/.aws/credentials` (0600; other profiles untouched) | AWS CLI/SDKs (`AWS_PROFILE=<host>`) |
 
