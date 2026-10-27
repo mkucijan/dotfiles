@@ -2,10 +2,11 @@
 [settings]
 experimental = true
 lockfile = true
-# rust stays on rustup; python envs via uv
+# python envs via uv; rust (dev) via mise rust backend (rustup underneath)
 disable_backends = ["asdf"]
 
 [tools]
+# ---- base: shell + core CLI (also on the Pi / Termux) ----
 chezmoi  = "latest"
 starship = "latest"
 fzf      = "latest"
@@ -17,27 +18,45 @@ zoxide   = "latest"
 delta    = "latest"
 lazygit  = "latest"
 jq       = "latest"
+dust     = "latest"
 {{- if not .termux }}
-neovim   = "0.12"
+neovim   = "latest"
 gh       = "latest"
-bitwarden = "2026.10.0"   # bw CLI (personal vault only; not used by the secrets flow)
-"github:bitwarden/sdk-sm" = { version = "2.1.0", version_prefix = "bws-v", bin = "bws" }   # Secrets Manager CLI
-"github:vectorize-io/hindsight" = { version = "1.1.0", bin = "hindsight" }
 atuin    = "latest"
-uv       = "latest"
+btop     = { version = "latest", os = ["linux"] }
+bitwarden = "latest"   # bw CLI (personal vault only; not used by the secrets flow)
+"github:bitwarden/sdk-sm" = { version = "latest", version_prefix = "bws-v", bin = "bws" }   # Secrets Manager CLI
 {{- else }}
 # Termux: glibc bw binary does not run on bionic; use the npm build on pkg nodejs
-"npm:@bitwarden/cli" = "2026.10.0"
+"npm:@bitwarden/cli" = "latest"
 # bws has no android build: `cargo install bws --locked` (pkg install rust) if needed
 {{- end }}
-{{- if eq .role "desktop" }}
-node     = "lts"
-python   = "3.13"
-pnpm     = "latest"
-btop     = { version = "latest", os = ["linux"] }
-dust     = "latest"
-xh       = "latest"
-tealdeer = "latest"
+{{- if .profile.dev }}
+
+# ---- dev: toolchains, LSPs, formatters (nvim enables LSPs only if the binary exists) ----
+node       = "lts"
+python     = "latest"
+uv         = "latest"
+pnpm       = "latest"
+go         = "latest"
+rust       = { version = "stable", components = "rust-analyzer,rustfmt,clippy" }
+tree-sitter = "latest"
+"aqua:LuaLS/lua-language-server" = "latest"
+stylua     = "latest"
+ruff       = "latest"
+shellcheck = "latest"
+shfmt      = "latest"
+"npm:pyright" = "latest"
+"npm:typescript" = "latest"
+"npm:typescript-language-server" = "latest"
+"npm:bash-language-server" = "latest"
+xh         = "latest"
+tealdeer   = "latest"
+{{- end }}
+{{- if .profile.agent }}
+
+# ---- agent: AI tool helpers (the AI CLIs themselves: .chezmoidata/agents.toml) ----
+"github:vectorize-io/hindsight" = { version = "latest", bin = "hindsight" }
 {{- end }}
 
 [env]
@@ -45,7 +64,7 @@ EDITOR = "nvim"
 
 [tasks.up]
 description = "Update dotfiles, tools and nvim plugins"
-run = ["chezmoi update --apply", "mise upgrade --bump=false", "nvim --headless '+Lazy! sync' +qa"]
+run = ["chezmoi update --apply", "mise upgrade --bump=false", "nvim --headless -c 'if exists(\":Lazy\") | exe \"Lazy! sync\" | endif' +qa"]
 
 [tasks.doctor]
 description = "Health check of the terminal setup"

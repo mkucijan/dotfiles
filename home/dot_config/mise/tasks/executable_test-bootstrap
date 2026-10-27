@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-#MISE description="Run install.sh in a clean container (default debian:trixie; IMAGE/PLATFORM override)"
+#MISE description="Run install.sh in a clean container (default debian:trixie; IMAGE/PLATFORM/DOTFILES_PROFILES override)"
 set -euo pipefail
 IMAGE=${IMAGE:-debian:trixie}; PLATFORM=${PLATFORM:-linux/amd64}
 SRC=$(chezmoi source-path)/..
-docker run --rm --platform "$PLATFORM" -v "$SRC:/dotfiles:ro" "$IMAGE" sh -c \
-  'apt-get update -qq && apt-get install -yqq curl git sudo >/dev/null; DOTFILES_SRC=/dotfiles sh /dotfiles/install.sh && zsh -i -c "echo ok"'
+docker run --rm --platform "$PLATFORM" -v "$SRC:/dotfiles:ro" -e DOTFILES_PROFILES "$IMAGE" sh -c \
+  'apt-get update -qq && apt-get install -yqq curl git sudo >/dev/null; DOTFILES_SRC=/dotfiles DOTFILES_PROFILES="${DOTFILES_PROFILES:-base}" sh /dotfiles/install.sh && zsh -i -c "echo ok"'

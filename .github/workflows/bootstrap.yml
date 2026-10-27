@@ -8,37 +8,31 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        runner: [ubuntu-latest, ubuntu-24.04-arm]
-        image: ["debian:trixie", "archlinux:latest"]
-        exclude:
-          - runner: ubuntu-24.04-arm
-            image: "archlinux:latest"   # no official arm64 Arch image
+        include:
+          - { runner: ubuntu-latest,    image: "debian:trixie",    profiles: "base" }
+          - { runner: ubuntu-24.04-arm, image: "debian:trixie",    profiles: "base" }        # Pi-like
+          - { runner: ubuntu-24.04-arm, image: "debian:trixie",    profiles: "base dev agent" }
+          - { runner: ubuntu-latest,    image: "archlinux:latest", profiles: "base dev agent ui" }
+    name: linux (${{ matrix.image }}, ${{ matrix.runner }}, ${{ matrix.profiles }})
     runs-on: ${{ matrix.runner }}
     container: ${{ matrix.image }}
     steps:
       - name: prereqs
         run: |
-          if command -v pacman >/dev/null; then pacman -Sy --noconfirm git curl; else apt-get update -qq && apt-get install -yqq git curl ca-certificates; fi
+          if command -v pacman >/dev/null; then pacman -Syu --noconfirm git curl; else apt-get update -qq && apt-get install -yqq git curl ca-certificates; fi
       - uses: actions/checkout@v4
       - name: install.sh
-        env: { DOTFILES_SRC: "${{ github.workspace }}", DOTFILES_ROLE: server, GITHUB_TOKEN: "${{ github.token }}" }
+        env: { DOTFILES_SRC: "${{ github.workspace }}", DOTFILES_PROFILES: "${{ matrix.profiles }}", GITHUB_TOKEN: "${{ github.token }}" }
         run: sh install.sh
       - name: verify
         shell: bash
-        run: |
-          export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
-          chezmoi apply --force --source "$GITHUB_WORKSPACE"   # 2nd pass: templates lookPath tools that mise just installed
-          chezmoi verify --source "$GITHUB_WORKSPACE" || { chezmoi diff --source "$GITHUB_WORKSPACE"; exit 1; }
-          start=$(date +%s%N); zsh -i -c exit; echo "zsh startup: $(( ($(date +%s%N)-start)/1000000 )) ms"
-          tmux -f ~/.config/tmux/tmux.conf new-session -d -s ci && tmux kill-server
-          nvim --headless +qa
-          mise doctor || true
+        env: { PROFILES: "${{ matrix.profiles }}" }
+        run: bash "$GITHUB_WORKSPACE/.github/verify.sh"
   macos:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
       - run: sh install.sh
-        env: { DOTFILES_SRC: "${{ github.workspace }}", DOTFILES_ROLE: desktop, NO_PKGS: "1", GITHUB_TOKEN: "${{ github.token }}" }
-      - run: |
-          export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
-          zsh -i -c exit && nvim --headless +qa
+        env: { DOTFILES_SRC: "${{ github.workspace }}", DOTFILES_PROFILES: "base dev agent", NO_PKGS: "1", GITHUB_TOKEN: "${{ github.token }}" }
+      - run: bash .github/verify.sh
+        env: { PROFILES: "base dev agent" }

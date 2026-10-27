@@ -1,0 +1,18 @@
+-- Neovim >= 0.11. Profile-aware (rendered by chezmoi):
+--   base: core options/keymaps only, zero plugins (fast, default $EDITOR everywhere)
+--   dev : same core + lazy.nvim plugin set + built-in LSP
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+-- skip providers/runtime plugins nobody uses: faster startup on every profile
+for _, p in ipairs({ "python3", "node", "perl", "ruby" }) do vim.g["loaded_" .. p .. "_provider"] = 0 end
+for _, p in ipairs({ "gzip", "tarPlugin", "zipPlugin", "tutor_mode_plugin", "2html_plugin", "remote_plugins", "spellfile_plugin" }) do
+  vim.g["loaded_" .. p] = 1
+end
+require("config.options")
+require("config.keymaps")
+{{- if .profile.dev }}
+require("config.lazy")
+require("config.lsp")
+{{- else }}
+pcall(vim.cmd.colorscheme, "habamax")
+{{- end }}

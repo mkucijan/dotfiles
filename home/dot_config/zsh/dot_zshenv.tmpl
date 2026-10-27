@@ -13,6 +13,13 @@ export EDITOR=nvim VISUAL=nvim PAGER="less" BAT_PAGER="less -R"
 # Secrets from bws (secrets-sync): 0600, untracked
 [[ -r $XDG_CONFIG_HOME/secrets/env ]] && source $XDG_CONFIG_HOME/secrets/env
 
+{{- if .profile.agent }}
+# agent profile: AI CLIs on PATH (.chezmoidata/agents.toml)
+{{- range .agents }}{{ if .path }}
+path=("{{ .path | replace "~" "$HOME" }}" $path)
+{{- end }}{{ end }}
+
 # Hindsight (memory): cloud profile + default bank; API key from an untracked 0600 file
 export HINDSIGHT_PROFILE=cloud HINDSIGHT_BANK=personal
 [[ -r $XDG_CONFIG_HOME/hindsight/api_key ]] && export HINDSIGHT_API_KEY="$(<$XDG_CONFIG_HOME/hindsight/api_key)"
+{{- end }}

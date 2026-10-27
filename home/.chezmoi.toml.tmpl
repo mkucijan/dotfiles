@@ -1,11 +1,23 @@
-{{- $role := "server" -}}
-{{- if eq .chezmoi.os "android" -}}{{ $role = "phone" }}
-{{- else if eq .chezmoi.os "darwin" -}}{{ $role = "desktop" }}
-{{- else if eq .chezmoi.hostname "arch" -}}{{ $role = "desktop" }}
+{{- /* Profiles stack: base (always) + any of dev agent ui. Source of truth, in order:
+       $DOTFILES_PROFILES > legacy $DOTFILES_ROLE > previously stored value > prompt (default by host). */ -}}
+{{- $legacy := dict "server" "base" "phone" "base" "desktop" "base dev agent ui" -}}
+{{- $def := "base" -}}
+{{- if eq .chezmoi.os "darwin" -}}{{ $def = "base dev agent ui" }}
+{{- else if eq .chezmoi.hostname "arch" -}}{{ $def = "base dev agent ui" }}
 {{- end -}}
-{{- $role = promptStringOnce . "role" "Role (desktop/server/phone)" $role -}}
+{{- $p := env "DOTFILES_PROFILES" -}}
+{{- if and (not $p) (env "DOTFILES_ROLE") -}}{{ $p = get $legacy (env "DOTFILES_ROLE") | default "base" }}{{ end -}}
+{{- if and (not $p) (hasKey . "role") (not (hasKey . "profiles")) -}}{{ $p = get $legacy .role | default "base" }}{{ end -}}
+{{- if not $p -}}{{ $p = promptStringOnce . "profiles" "Profiles (space-separated: base dev agent ui)" $def }}{{ end -}}
+{{- $list := list "base" -}}
+{{- range (splitList " " (replace "," " " $p)) -}}{{ if and . (not (has . $list)) }}{{ $list = append $list . }}{{ end }}{{ end -}}
 sourceDir = {{ .chezmoi.workingTree | quote }}
 
 [data]
-role = {{ $role | quote }}
+profiles = {{ join " " $list | quote }}
 termux = {{ contains "com.termux" (env "PREFIX") }}
+
+[data.profile]
+{{- range (list "base" "dev" "agent" "ui") }}
+{{ . }} = {{ has . $list }}
+{{- end }}

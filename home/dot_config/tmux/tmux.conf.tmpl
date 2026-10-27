@@ -45,7 +45,7 @@ unbind p; bind p paste-buffer
 bind -T copy-mode-vi v send -X begin-selection
 bind -T copy-mode-vi C-v send -X rectangle-toggle
 bind -T copy-mode-vi y send -X copy-selection-and-cancel
-{{- if eq .role "desktop" }}
+{{- if .profile.ui }}
 bind -T copy-mode-vi o send -X copy-pipe-and-cancel "{{ if eq .chezmoi.os "darwin" }}xargs open{{ else }}xargs -r xdg-open{{ end }}"
 {{- end }}
 

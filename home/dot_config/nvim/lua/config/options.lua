@@ -10,3 +10,6 @@ if os.getenv("SSH_TTY") or os.getenv("TMUX") then
   vim.g.clipboard = "osc52"
 end
 o.clipboard = "unnamedplus"
+o.path:append("**"); o.wildignore:append({ "*/.git/*", "*/node_modules/*", "*/target/*" })
+if vim.fn.executable("rg") == 1 then o.grepprg = "rg --vimgrep --smart-case"; o.grepformat = "%f:%l:%c:%m" end
+vim.g.netrw_banner = 0; vim.g.netrw_liststyle = 3

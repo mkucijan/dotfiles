@@ -1,0 +1,13 @@
+{{- if .profile.agent -}}
+#!/bin/sh
+# agent profile: install AI CLIs listed in .chezmoidata/agents.toml. Re-runs when that list changes.
+# agents: {{ .agents | toJson | sha256sum }}
+set -u
+export PATH="$HOME/.local/bin:$PATH"
+{{- range .agents }}
+if ! ( {{ .check }} ) >/dev/null 2>&1; then
+  echo "agent: installing {{ .name }}"
+  ( {{ .install }} ) || echo "agent: {{ .name }} install failed (continuing)"
+fi
+{{- end }}
+{{- end }}

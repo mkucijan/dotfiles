@@ -1,5 +1,16 @@
 README.md
-{{ if ne .role "desktop" }}
+{{- /* profile gates: files only deployed when their profile is enabled */}}
+{{ if not .profile.dev }}
+.config/nvim/lua/plugins
+.config/nvim/lua/config/lazy.lua
+.config/nvim/lua/config/lsp.lua
+.config/nvim/lazy-lock.json
+{{ end }}
+{{ if not .profile.agent }}
+.grok
+.hindsight
+{{ end }}
+{{ if not .profile.ui }}
 .config/alacritty
 {{ end }}
 {{ if ne .chezmoi.os "linux" }}

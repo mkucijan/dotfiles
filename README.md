@@ -2,19 +2,38 @@
 
 Cross-platform terminal setup (zsh, tmux, Neovim, git, mise tools) for Arch, Debian/Raspberry Pi, the Pixel 7 Debian chroot, Termux and macOS.
 
-- **chezmoi** renders `home/` into `$HOME` (templates by OS, arch, hostname and `role` = desktop/server/phone).
+- **chezmoi** renders `home/` into `$HOME` (templates by OS, arch, hostname and stackable `profiles`: base, dev, agent, ui — see below).
 - **mise** installs pinned CLI tools and runtimes from `~/.config/mise/config.toml` + `mise.lock` (linux-x64, linux-arm64, macos-arm64).
 - tmux and zsh plugins are pinned git checkouts (`.chezmoiexternal.toml` + `run_onchange_after_10-pin-plugins.sh.tmpl`); no TPM.
 - Neovim: Lua + lazy.nvim (`lazy-lock.json`), built-in LSP enabled only for servers that are installed.
 - The old setup (bspwm/polybar/rofi rice, old zsh/tmux/vim/alacritty configs, deploy scripts, package lists) is **not** on `main` anymore: it is preserved at tag [`legacy-2024`](https://github.com/mkucijan/dotfiles/tree/legacy-2024). Bring pieces back as needed with `git show legacy-2024:<path>`.
 
+## Profiles
+
+Install is split into stackable profiles. `base` is always on; add others space-separated.
+
+| Profile | What it adds | Typical hosts |
+|---|---|---|
+| `base` | zsh + starship/atuin/zoxide/fzf, tmux, core CLI (rg, fd, bat, eza, delta, lazygit, jq, dust, btop), git + gh, `bw`/`bws` + `secrets-sync`, `~/.ssh/config.d/tailnet`. Neovim as `$EDITOR` with **zero plugins** (shared core options/keymaps, netrw, builtin `:find`/`:grep`) | Pi, Termux, servers |
+| `dev` | full Neovim plugin set (lazy.nvim, blink.cmp, treesitter, conform, fzf-lua, oil...) on top of the same core; built-in LSP; toolchains + LSPs/formatters via mise: node, python + uv, pnpm, go, rust (rust-analyzer), tree-sitter, lua-language-server, stylua, ruff, shellcheck, shfmt, pyright, typescript(-language-server), bash-language-server, xh, tealdeer; `build-essential`/`base-devel` | arch, macOS, dev boxes |
+| `agent` | AI CLIs from `home/.chezmoidata/agents.toml` (now: Grok CLI) + their config (`~/.grok/config.toml` merged, Hindsight MCP), `hindsight` CLI | anywhere you run agents |
+| `ui` | Alacritty config, tmux open-URL binding; packages: alacritty, JetBrains Mono Nerd font, Bitwarden desktop (pacman / brew casks; Debian: alacritty + font only) | arch, macOS |
+
+Defaults: arch and macOS get `base dev agent ui`, everything else `base`. Legacy `DOTFILES_ROLE` still works (`server`/`phone` -> `base`, `desktop` -> all four).
+The choice is stored in `~/.config/chezmoi/chezmoi.toml` (`profiles = "..."`); change it later with
+`DOTFILES_PROFILES="base dev" chezmoi init --apply` (or re-run `install.sh` with the env var).
+
 ## Install
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/mkucijan/dotfiles/main/install.sh | sh
-# or from a checkout:
-DOTFILES_SRC=$PWD DOTFILES_ROLE=server sh install.sh
+curl -fsSL https://raw.githubusercontent.com/mkucijan/dotfiles/main/install.sh | DOTFILES_PROFILES="base" sh
+curl -fsSL https://raw.githubusercontent.com/mkucijan/dotfiles/main/install.sh | DOTFILES_PROFILES="base dev agent" sh
+# from a checkout (e.g. testing a branch):
+git clone -b modern https://github.com/mkucijan/dotfiles ~/dotfiles && cd ~/dotfiles
+DOTFILES_SRC=$PWD DOTFILES_PROFILES="base dev agent ui" sh install.sh
 ```
+
+Lock files are seed-only: `mise.lock` and `nvim/lazy-lock.json` are copied from the repo on first install and whenever the repo version changes (then `mise install` / `:Lazy restore` run), but the tools own them afterwards, so `chezmoi verify` stays clean. To upgrade: `mise run up`, then copy the new locks back into the repo (`mise lock --platform linux-x64,linux-arm64,macos-arm64` for mise).
 
 ## Daily use
 
@@ -23,7 +42,7 @@ DOTFILES_SRC=$PWD DOTFILES_ROLE=server sh install.sh
 | `chezmoi edit ~/.config/zsh/.zshrc` / `chezmoi apply` | edit and deploy |
 | `chezmoi diff` | preview |
 | `mise run up` | update dotfiles, tools, nvim plugins |
-| `mise run test-bootstrap` | run install.sh in a clean container |
+| `mise run test-bootstrap` | run install.sh in a clean container (`DOTFILES_PROFILES`, `IMAGE`, `PLATFORM`) |
 | `$ZDOTDIR/local.zsh`, `~/.config/tmux/local.conf`, `~/.config/git/local` | untracked per-machine overrides |
 
 Secrets never go in this repo. `~/.grok/config.toml` is merged (modify template), so Grok can keep writing to it.
@@ -81,4 +100,11 @@ Every device follows the same standard:
 2. **OpenSSH with key auth on port 2222 alongside 22**: `/etc/ssh/sshd_config.d/10-ports.conf` with `Port 22` + `Port 2222` and `PasswordAuthentication no`. Termux/Android uses its sshd on **8022**. Tailscale SSH (port 22 via tailscale) stays only as the browser-terminal backup.
 3. **Authorize keys**: add the box's and arch's `~/.ssh/id_ed25519.pub` to the device's `~/.ssh/authorized_keys`.
 4. **Add a `Host` entry** to `home/private_dot_ssh/private_config.d/tailnet` (→ `~/.ssh/config.d/tailnet`) and push.
-5. **Secrets**: create a bws machine token for it, save to `~/.config/bws/token` (0600), run `mise run secrets`; if it needs AWS, create scoped `aws-<host>-access-key-id` / `aws-<host>-secret-access-key` (never the `kuc` admin keys).
+5. **Profiles**: pick them at install (`DOTFILES_PROFILES=...`); servers/phones `base`, workstations add `dev agent ui`.
+6. **Secrets**: create a bws machine token for it, save to `~/.config/bws/token` (0600), run `mise run secrets`; if it needs AWS, create scoped `aws-<host>-access-key-id` / `aws-<host>-secret-access-key` (never the `kuc` admin keys).
+
+## Adding an AI tool (agent profile)
+
+1. Add an `[[agents]]` entry to `home/.chezmoidata/agents.toml`: `name`, `check` (already installed?), `install` (idempotent, must not edit shell rc files), optional `path` (prepended to PATH by zshenv).
+2. If it has config, add `home/dot_<tool>/` (use a `modify_` template if the tool rewrites its own config, like `dot_grok/modify_config.toml`) and list it under the `agent` block in `home/.chezmoiignore`.
+3. MCP servers: reuse the Hindsight pattern in `dot_grok/modify_config.toml` (key from an untracked file at apply time, never committed).

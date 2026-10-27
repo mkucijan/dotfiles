@@ -4,7 +4,7 @@
 {{- if .chezmoi.stdin }}{{ $cur = fromToml .chezmoi.stdin }}{{ end -}}
 {{- $cli := get $cur "cli" | default dict -}}
 {{- $_ := set $cli "use_leader" true -}}
-{{- $_ := set $cli "auto_update" (ne .role "phone") -}}
+{{- $_ := set $cli "auto_update" (not .termux) -}}
 {{- $_ := set $cur "cli" $cli -}}
 {{- $mk := get $cur "marketplace" | default dict -}}
 {{- if not (hasKey $mk "sources") -}}
