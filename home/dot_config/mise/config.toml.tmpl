@@ -64,7 +64,7 @@ rust       = { version = "stable", components = "rust-analyzer,rustfmt,clippy" }
 {{- end }}
 
 [env]
-EDITOR = "nvim"
+# EDITOR/VISUAL are set by zshrc to the real nvim binary (never a mise shim)
 
 [tasks.up]
 description = "Update dotfiles, tools and nvim plugins"
