@@ -1,0 +1,24 @@
+# Tailscale MagicDNS names (MagicDNS must be enabled on this device).
+# Managed by chezmoi (dotfiles). Local/extra hosts go in ~/.ssh/config itself.
+# arch: port 22 is Tailscale SSH (browser terminal only); normal sshd is on 2222.
+Host arch
+  HostName arch
+  User mkucijan
+  Port 2222
+
+Host rpi
+  HostName rpi-vpn-gateway
+  User mkucijan
+
+Host pixel
+  HostName pixel-10-pro-xl
+  Port 8022
+
+Host pixel7
+  HostName pixel7
+  User mkucijan
+
+Host *
+  ServerAliveInterval 30
+  IdentityFile ~/.ssh/id_ed25519
+  AddKeysToAgent yes

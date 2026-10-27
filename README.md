@@ -68,3 +68,7 @@ Termux: bws has no Android build; `pkg install rust && cargo install bws --locke
 Manual fallback (no bws): `install -m 600 /dev/null ~/.config/hindsight/api_key && $EDITOR ~/.config/hindsight/api_key`.
 
 Add a secret: create it in bws, then add an entry to `home/.chezmoidata/secrets.toml`.
+
+## SSH client config
+
+chezmoi manages `~/.ssh/config.d/tailnet` using Tailscale MagicDNS names — **MagicDNS must be enabled on each device** (arch on port 2222 — port 22 there is Tailscale SSH for the browser terminal only — plus rpi, pixel, pixel7 and `Host *` defaults). Your own `~/.ssh/config` is **not** overwritten: a modify script keeps `Include config.d/*` as the first line (creating the file if absent, idempotent), so local entries survive (first match wins in ssh, so a local `Host` block after the Include can't override a managed one; put overrides in another `config.d/` file sorted before `tailnet`). Keys and `known_hosts` are never tracked.
