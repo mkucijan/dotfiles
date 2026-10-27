@@ -1,0 +1,38 @@
+name: bootstrap
+on:
+  push: { branches: [main, modern] }
+  pull_request:
+  workflow_dispatch:
+jobs:
+  linux:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { runner: ubuntu-latest,    image: "debian:trixie",    profiles: "base" }
+          - { runner: ubuntu-24.04-arm, image: "debian:trixie",    profiles: "base" }        # Pi-like
+          - { runner: ubuntu-24.04-arm, image: "debian:trixie",    profiles: "base dev agent" }
+          - { runner: ubuntu-latest,    image: "archlinux:latest", profiles: "base dev rust agent ui" }
+    name: linux (${{ matrix.image }}, ${{ matrix.runner }}, ${{ matrix.profiles }})
+    runs-on: ${{ matrix.runner }}
+    container: ${{ matrix.image }}
+    steps:
+      - name: prereqs
+        run: |
+          if command -v pacman >/dev/null; then pacman -Syu --noconfirm git curl openssh; else apt-get update -qq && apt-get install -yqq git curl ca-certificates openssh-client; fi
+      - uses: actions/checkout@v4
+      - name: install.sh
+        env: { DOTFILES_SRC: "${{ github.workspace }}", DOTFILES_PROFILES: "${{ matrix.profiles }}", GITHUB_TOKEN: "${{ github.token }}" }
+        run: sh install.sh
+      - name: verify
+        shell: bash
+        env: { PROFILES: "${{ matrix.profiles }}" }
+        run: bash "$GITHUB_WORKSPACE/.github/verify.sh"
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sh install.sh
+        env: { DOTFILES_SRC: "${{ github.workspace }}", DOTFILES_PROFILES: "base dev agent", NO_PKGS: "1", GITHUB_TOKEN: "${{ github.token }}" }
+      - run: bash .github/verify.sh
+        env: { PROFILES: "base dev agent" }

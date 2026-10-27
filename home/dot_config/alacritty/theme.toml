@@ -1,0 +1,24 @@
+# gruvbox-ish (carried over from the old config)
+[colors]
+draw_bold_text_with_bright_colors = true
+[colors.primary]
+background = "0x282828"
+foreground = "0xDCDCDC"
+[colors.normal]
+black = "0x282828"
+red = "0x8f040d"
+green = "0x38874a"
+yellow = "0xf7a921"
+blue = "0x456578"
+magenta = "0xb16286"
+cyan = "0x78ad9a"
+white = "0xDCDCDC"
+[colors.bright]
+black = "0x928374"
+red = "0xfb4934"
+green = "0xb8bb26"
+yellow = "0xfabd2f"
+blue = "0x83a598"
+magenta = "0xd3869b"
+cyan = "0x8ec07c"
+white = "0xebdbb2"

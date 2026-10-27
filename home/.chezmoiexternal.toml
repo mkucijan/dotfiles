@@ -1,0 +1,27 @@
+# tmux plugins pinned to commits (no plugin manager). Bump the ref to update.
+[".local/share/tmux/plugins/tmux-resurrect"]
+type = "git-repo"
+url = "https://github.com/tmux-plugins/tmux-resurrect.git"
+refreshPeriod = "0"
+clone.args = ["--depth", "50"]
+pull.args = ["--ff-only"]
+[".local/share/tmux/plugins/tmux-continuum"]
+type = "git-repo"
+url = "https://github.com/tmux-plugins/tmux-continuum.git"
+refreshPeriod = "0"
+clone.args = ["--depth", "50"]
+[".local/share/tmux/plugins/vim-tmux-navigator"]
+type = "git-repo"
+url = "https://github.com/christoomey/vim-tmux-navigator.git"
+refreshPeriod = "0"
+clone.args = ["--depth", "50"]
+[".local/share/zsh/plugins/zsh-autosuggestions"]
+type = "git-repo"
+url = "https://github.com/zsh-users/zsh-autosuggestions.git"
+refreshPeriod = "0"
+clone.args = ["--depth", "1"]
+[".local/share/zsh/plugins/zsh-syntax-highlighting"]
+type = "git-repo"
+url = "https://github.com/zsh-users/zsh-syntax-highlighting.git"
+refreshPeriod = "0"
+clone.args = ["--depth", "1"]

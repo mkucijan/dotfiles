@@ -1,0 +1,6 @@
+#!/bin/sh
+# quick sanity check of the terminal setup on this device
+for t in zsh tmux nvim git mise chezmoi starship fzf rg fd eza zoxide atuin; do
+  printf '%-10s %s\n' "$t" "$(command -v $t >/dev/null 2>&1 && echo ok || echo MISSING)"
+done
+printf 'zsh startup: '; /usr/bin/env time -f '%es' zsh -i -c exit 2>&1 | tail -1 || true

@@ -1,0 +1,12 @@
+# AI tools installed by the `agent` profile. Adding a tool = one [[agents]] entry here
+# (+ optionally its config dir, e.g. home/dot_<tool>/, which .chezmoiignore hides without `agent`).
+# install: shell run once per change of this entry (idempotent; must not edit shell rc files).
+# check:   command whose success means "already installed" (skip install unless the entry changed).
+# path:    dir prepended to PATH by zshenv.
+
+[[agents]]
+name    = "grok"
+check   = "test -x \"$HOME/.grok/bin/grok\""
+install = "curl -fsSL https://x.ai/cli/install.sh | SHELL=/bin/sh bash"   # SHELL=sh: installer skips rc edits
+path    = "~/.grok/bin"
+config  = ".grok"                                                           # home/dot_grok (modify_config.toml merges MCP servers)
