@@ -35,8 +35,14 @@ fi
 
 log "tools (mise install)"
 mise install --yes || log "some tools failed; rerun 'mise install'"
-command -v nvim >/dev/null 2>&1 || eval "$(mise activate sh)"
+export PATH="${MISE_DATA_DIR:-$HOME/.local/share/mise}/shims:$PATH"
 command -v nvim >/dev/null 2>&1 && { log "nvim plugins"; nvim --headless '+Lazy! restore' +qa >/dev/null 2>&1 || true; }
 
-case "$(basename "${SHELL:-sh}")" in zsh) ;; *) [ "$OS" = termux ] && chsh -s zsh || chsh -s "$(command -v zsh)" 2>/dev/null || log "run: chsh -s $(command -v zsh)";; esac
+case "$(basename "${SHELL:-sh}")" in zsh) ;; *)
+  if [ "$OS" = termux ]; then chsh -s zsh
+  else ZSH_BIN=$(command -v zsh)
+    # chsh prompts for a password; prefer passwordless sudo when available
+    { [ -n "$SUDO" ] && $SUDO -n chsh -s "$ZSH_BIN" "$(id -un)" 2>/dev/null; } || chsh -s "$ZSH_BIN" </dev/null 2>/dev/null || log "run: chsh -s $ZSH_BIN"
+  fi ;;
+esac
 log "done. Start a new shell (or tmux kill-server) to pick up the config."

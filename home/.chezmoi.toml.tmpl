@@ -4,6 +4,8 @@
 {{- else if eq .chezmoi.hostname "arch" -}}{{ $role = "desktop" }}
 {{- end -}}
 {{- $role = promptStringOnce . "role" "Role (desktop/server/phone)" $role -}}
+sourceDir = {{ .chezmoi.workingTree | quote }}
+
 [data]
 role = {{ $role | quote }}
 termux = {{ contains "com.termux" (env "PREFIX") }}
