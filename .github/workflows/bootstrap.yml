@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: prereqs
         run: |
-          if command -v pacman >/dev/null; then pacman -Syu --noconfirm git curl; else apt-get update -qq && apt-get install -yqq git curl ca-certificates; fi
+          if command -v pacman >/dev/null; then pacman -Syu --noconfirm git curl openssh; else apt-get update -qq && apt-get install -yqq git curl ca-certificates openssh-client; fi
       - uses: actions/checkout@v4
       - name: install.sh
         env: { DOTFILES_SRC: "${{ github.workspace }}", DOTFILES_PROFILES: "${{ matrix.profiles }}", GITHUB_TOKEN: "${{ github.token }}" }

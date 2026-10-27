@@ -3,6 +3,9 @@
 # version here whenever the repo's config or lock changes.
 # config: {{ includeTemplate "dot_config/mise/config.toml.tmpl" . | sha256sum }}
 # lock:   {{ include "dot_config/mise/create_mise.lock" | sha256sum }}
+# npm sidecars: {{ output "sh" "-c" (printf "cd %q && find .mise-locks -type f | sort | xargs cat | sha256sum" .chezmoi.sourceDir) | trim }}
 cp "{{ .chezmoi.sourceDir }}/dot_config/mise/create_mise.lock" "$HOME/.config/mise/mise.lock"
+# npm: tools need their dependency sidecars next to the lock (home/.mise-locks, not deployed by chezmoi itself)
+mkdir -p "$HOME/.config/mise/.mise/locks" && cp -R "{{ .chezmoi.sourceDir }}/.mise-locks/." "$HOME/.config/mise/.mise/locks/"
 command -v mise >/dev/null 2>&1 || exit 0
 mise install --yes || echo "mise install had failures (see above); continuing"

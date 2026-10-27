@@ -8,7 +8,7 @@ ms() { local s=$(date +%s%N); "$@" >/dev/null 2>&1; local r=$?; echo "$(( ($(dat
 chezmoi verify && ok "chezmoi verify clean" || { bad "chezmoi verify"; chezmoi diff --no-pager | head -40; }
 [[ -z "$(mise ls --missing 2>/dev/null)" ]] && ok "mise ls --missing empty" || { bad "mise missing:"; mise ls --missing; }
 t=$(ms zsh -i -c exit) && ok "zsh -i -c exit ($t)" || bad "zsh -i"
-t=$(ms sh -c 'tmux -f ~/.config/tmux/tmux.conf -L ci new-session -d -s ci && tmux -L ci kill-server') && ok "tmux ($t)" || bad tmux
+if ! command -v tmux >/dev/null; then echo "SKIP tmux (not installed: NO_PKGS)"; else t=$(ms sh -c 'tmux -f ~/.config/tmux/tmux.conf -L ci new-session -d -s ci && tmux -L ci kill-server') && ok "tmux ($t)" || bad tmux; fi
 t=$(ms nvim --headless +qa) && ok "nvim --headless +qa ($t)" || bad nvim
 err=$(nvim --headless +qa 2>&1); [[ -z "$err" ]] && ok "nvim no startup output" || { bad "nvim output"; echo "$err" | head; }
 [[ "$(head -1 ~/.ssh/config)" == "Include config.d/*" ]] && ok "ssh config Include first" || bad "ssh Include"
