@@ -24,5 +24,11 @@
 {{- $_ := set $gcloud "command" "gcloud-mcp" -}}
 {{- $_ := set $gcloud "enabled" true -}}
 {{- $_ := set $mcp "gcloud" $gcloud -}}
+{{- /* firebase MCP: npx firebase-tools mcp Spark/free needs firebase login */ -}}
+{{- $firebase := get $mcp "firebase" | default (dict "command" "npx") -}}
+{{- $_ := set $firebase "command" "npx" -}}
+{{- $_ := set $firebase "args" (list "-y" "firebase-tools@latest" "mcp") -}}
+{{- $_ := set $firebase "enabled" true -}}
+{{- $_ := set $mcp "firebase" $firebase -}}
 {{- $_ := set $cur "mcp_servers" $mcp -}}
 {{ toToml $cur }}
