@@ -8,6 +8,8 @@ export EDITOR=nvim VISUAL=nvim PAGER="less" BAT_PAGER="less -R"
 [[ -d $HOME/.pixi/bin ]]    && path=("$HOME/.pixi/bin" $path)
 [[ -d /opt/android-studio/jbr ]] && export JAVA_HOME=/opt/android-studio/jbr
 [[ -d $HOME/Android/Sdk ]] && export ANDROID_HOME="$HOME/Android/Sdk"
+[[ -d $HOME/opt/google-cloud-sdk/bin ]] && path+=("$HOME/opt/google-cloud-sdk/bin")
+[[ -r $HOME/opt/google-cloud-sdk/completion.zsh.inc ]] && source "$HOME/opt/google-cloud-sdk/completion.zsh.inc"
 {{- end }}
 
 # Hindsight (memory): cloud profile + default bank; API key from an untracked 0600 file

@@ -38,6 +38,18 @@ hindsight memory recall "$HINDSIGHT_BANK" "test"
 chezmoi apply   # enables the hindsight MCP server in ~/.grok/config.toml (bearer_token_file)
 ```
 
+## Google Cloud (gcloud + gcloud-mcp)
+
+Install the Google Cloud SDK user-locally once (`~/opt/google-cloud-sdk`; PATH and completion come from chezmoi on arch). The `gcloud-mcp` wrapper in `~/.local/bin` launches `@google-cloud/gcloud-mcp` for Grok CLI. Sign in once:
+
+```sh
+gcloud auth login --no-launch-browser
+# optional ADC for libraries:
+gcloud auth application-default login --no-launch-browser
+chezmoi apply   # keeps [mcp_servers.gcloud] in ~/.grok/config.toml
+grok mcp list
+```
+
 ## Secrets: Bitwarden (opt-in)
 
 Secrets never live in this repo. chezmoi reads them from Bitwarden only when **all** of these hold: `use_bitwarden = true` in `~/.config/chezmoi/chezmoi.toml`, `bw` is installed (mise; npm build on Termux) and `BW_SESSION` is set. Otherwise the secret files are left as they are (manual fallback) and `chezmoi apply` still succeeds.

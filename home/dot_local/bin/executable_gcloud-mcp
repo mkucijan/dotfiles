@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Launch Google Cloud gcloud-mcp with gcloud on PATH.
+export PATH="${HOME}/opt/google-cloud-sdk/bin:${PATH}"
+exec npx -y @google-cloud/gcloud-mcp "$@"
