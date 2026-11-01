@@ -14,5 +14,7 @@ require("config.keymaps")
 require("config.lazy")
 require("config.lsp")
 {{- else }}
-pcall(vim.cmd.colorscheme, "habamax")
+-- Neovim >= 0.12 ships a builtin catppuccin (mocha when background=dark). Zero cost.
+vim.o.background = "dark"
+pcall(vim.cmd.colorscheme, "catppuccin")
 {{- end }}

@@ -6,6 +6,7 @@ set -g history-limit 50000
 set -g focus-events on
 set -g display-time 2000
 set -g status-interval 5
+set -g status-position top
 set -g base-index 1
 setw -g pane-base-index 1
 set -g renumber-windows on
@@ -49,18 +50,26 @@ bind -T copy-mode-vi y send -X copy-selection-and-cancel
 bind -T copy-mode-vi o send -X copy-pipe-and-cancel "{{ if eq .chezmoi.os "darwin" }}xargs open{{ else }}xargs -r xdg-open{{ end }}"
 {{- end }}
 
-# look (inline, replaces maglev)
-set -g pane-border-style fg=colour238
-set -g pane-active-border-style fg=brightred
-set -g message-style fg=black,bg=yellow
-setw -g mode-style bg=colour6,fg=colour0
-set -g status-style bg=default,fg=colour12
-set -g status-left "#{?client_prefix,#[bg=yellow fg=black] ^ ,}#[fg=colour8] #S "
-set -g status-right "#[fg=colour8]{{ .chezmoi.hostname }} %H:%M "
-setw -g window-status-format "#[fg=magenta,bg=black] #I #[bg=cyan,fg=colour8] #W "
-setw -g window-status-current-format "#[bg=brightmagenta,fg=colour8] #I #[fg=colour8,bg=colour14] #W "
+# catppuccin mocha (pinned external, no tpm). basic window style + block
+# separators: no Nerd Font / powerline required. Module icons cleared so
+# Termux/Pi without a patched font don't show tofu; text still reads fine.
 set -g visual-activity off
 set -g bell-action none
+set -g @catppuccin_flavor "mocha"
+set -g @catppuccin_window_status_style "basic"
+set -g @catppuccin_status_left_separator "█"
+set -g @catppuccin_status_right_separator "█"
+set -g @catppuccin_status_connect_separator "yes"
+set -g @catppuccin_session_icon ""
+set -g @catppuccin_host_icon ""
+set -g @catppuccin_date_time_icon ""
+set -g @catppuccin_date_time_text " %H:%M"
+run-shell "~/.local/share/tmux/plugins/catppuccin/catppuccin.tmux"
+set -g status-left-length 100
+set -g status-right-length 100
+set -g status-left "#{E:@catppuccin_status_session}"
+set -g status-right "#{E:@catppuccin_status_host}"
+set -ag status-right "#{E:@catppuccin_status_date_time}"
 
 # plugins: pinned git checkouts from chezmoi externals
 set -g @continuum-restore 'on'

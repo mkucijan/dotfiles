@@ -1,4 +1,4 @@
-# tmux plugins pinned to commits (no plugin manager). Bump the ref to update.
+# tmux / zsh plugins pinned to commits (no plugin manager). Bump the ref to update.
 [".local/share/tmux/plugins/tmux-resurrect"]
 type = "git-repo"
 url = "https://github.com/tmux-plugins/tmux-resurrect.git"
@@ -13,6 +13,11 @@ clone.args = ["--depth", "50"]
 [".local/share/tmux/plugins/vim-tmux-navigator"]
 type = "git-repo"
 url = "https://github.com/christoomey/vim-tmux-navigator.git"
+refreshPeriod = "0"
+clone.args = ["--depth", "50"]
+[".local/share/tmux/plugins/catppuccin"]
+type = "git-repo"
+url = "https://github.com/catppuccin/tmux.git"
 refreshPeriod = "0"
 clone.args = ["--depth", "50"]
 [".local/share/zsh/plugins/zsh-autosuggestions"]
