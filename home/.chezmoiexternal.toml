@@ -15,11 +15,6 @@ type = "git-repo"
 url = "https://github.com/christoomey/vim-tmux-navigator.git"
 refreshPeriod = "0"
 clone.args = ["--depth", "50"]
-[".local/share/tmux/plugins/catppuccin"]
-type = "git-repo"
-url = "https://github.com/catppuccin/tmux.git"
-refreshPeriod = "0"
-clone.args = ["--depth", "50"]
 [".local/share/zsh/plugins/zsh-autosuggestions"]
 type = "git-repo"
 url = "https://github.com/zsh-users/zsh-autosuggestions.git"

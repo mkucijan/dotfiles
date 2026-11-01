@@ -50,26 +50,28 @@ bind -T copy-mode-vi y send -X copy-selection-and-cancel
 bind -T copy-mode-vi o send -X copy-pipe-and-cancel "{{ if eq .chezmoi.os "darwin" }}xargs open{{ else }}xargs -r xdg-open{{ end }}"
 {{- end }}
 
-# catppuccin mocha (pinned external, no tpm). basic window style + block
-# separators: no Nerd Font / powerline required. Module icons cleared so
-# Termux/Pi without a patched font don't show tofu; text still reads fine.
+# VS Code Dark+ / Dark Modern status (inline, no theme plugins).
+# Plain ASCII spacing only — no block/powerline glyphs (those rendered as "_"
+# on Pi/Termux without a patched font).
 set -g visual-activity off
 set -g bell-action none
-set -g @catppuccin_flavor "mocha"
-set -g @catppuccin_window_status_style "basic"
-set -g @catppuccin_status_left_separator "█"
-set -g @catppuccin_status_right_separator "█"
-set -g @catppuccin_status_connect_separator "yes"
-set -g @catppuccin_session_icon ""
-set -g @catppuccin_host_icon ""
-set -g @catppuccin_date_time_icon ""
-set -g @catppuccin_date_time_text " %H:%M"
-run-shell "~/.local/share/tmux/plugins/catppuccin/catppuccin.tmux"
-set -g status-left-length 100
-set -g status-right-length 100
-set -g status-left "#{E:@catppuccin_status_session}"
-set -g status-right "#{E:@catppuccin_status_host}"
-set -ag status-right "#{E:@catppuccin_status_date_time}"
+set -g status-style "bg=#1f1f1f,fg=#cccccc"
+set -g status-left-length 40
+set -g status-right-length 60
+# session name left; yellow when prefix is held, otherwise VS Code blue accent
+set -g status-left "#{?client_prefix,#[fg=#1f1f1f bg=#e5e510 bold] #S #[fg=#cccccc bg=#1f1f1f],#[fg=#ffffff bg=#0078d4 bold] #S #[fg=#cccccc bg=#1f1f1f]} "
+set -g status-right " #[fg=#cccccc]#H  %H:%M "
+set -g window-status-separator ""
+set -g window-status-format " #[fg=#9d9d9d]#I #W "
+set -g window-status-current-format " #[fg=#ffffff bg=#0078d4 bold] #I #W #[fg=#cccccc bg=#1f1f1f]"
+set -g window-status-activity-style "fg=#e5e510,bg=#1f1f1f"
+set -g pane-border-style "fg=#3c3c3c"
+set -g pane-active-border-style "fg=#0078d4"
+set -g message-style "bg=#264f78,fg=#ffffff"
+set -g message-command-style "bg=#264f78,fg=#ffffff"
+set -g mode-style "bg=#264f78,fg=#ffffff"
+set -g copy-mode-match-style "bg=#264f78,fg=#ffffff"
+set -g copy-mode-current-match-style "bg=#0078d4,fg=#ffffff"
 
 # plugins: pinned git checkouts from chezmoi externals
 set -g @continuum-restore 'on'

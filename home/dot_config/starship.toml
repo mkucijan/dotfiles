@@ -1,6 +1,7 @@
-# Starship config: Plain Text Symbols preset (browser/SSH-friendly; no Nerd Font glyphs)
-# Merged with the previous custom module format from this repo.
-# Regenerate symbols with: starship preset plain-text-symbols
+# Starship config: Plain Text Symbols + VS Code Dark+ high-contrast colors
+# Browser/SSH-friendly (no Nerd Font glyphs). Regenerate symbols with:
+#   starship preset plain-text-symbols
+# Colors tuned for near-black terminals (tmux/browser Dark Modern).
 #add_newline = false
 
 format = """\
@@ -49,15 +50,22 @@ format = """\
 
 "$schema" = 'https://starship.rs/config-schema.json'
 
-continuation_prompt = "[.](bright-black) "
+continuation_prompt = "[.](bold #9d9d9d) "
+
+# High-contrast VS Code Dark+ module colors (plain-text symbols kept)
+[username]
+style_user = "bold #ffffff"
+style_root = "bold #f14c4c"
+format = "[$user]($style) "
+show_always = true
 
 [character]
-success_symbol = "[>](bold green)"
-error_symbol = "[x](bold red)"
-vimcmd_symbol = "[<](bold green)"
-vimcmd_visual_symbol = "[<](bold yellow)"
-vimcmd_replace_symbol = "[<](bold purple)"
-vimcmd_replace_one_symbol = "[<](bold purple)"
+success_symbol = "[>](bold #23d18b)"
+error_symbol = "[x](bold #f14c4c)"
+vimcmd_symbol = "[<](bold #23d18b)"
+vimcmd_visual_symbol = "[<](bold #f5f543)"
+vimcmd_replace_symbol = "[<](bold #d670d6)"
+vimcmd_replace_one_symbol = "[<](bold #d670d6)"
 
 [git_commit]
 tag_symbol = " tag "
@@ -123,7 +131,11 @@ format = "via [$symbol($version )(target $tfm )]($style)"
 symbol = ".NET "
 
 [directory]
+style = "bold #ffffff"
 read_only = " ro"
+read_only_style = "bold #f14c4c"
+truncation_length = 3
+truncate_to_repo = true
 
 [docker_context]
 symbol = "docker "
@@ -152,6 +164,7 @@ symbol = "gcp "
 
 [git_branch]
 symbol = "git "
+style = "bold #c586c0"
 truncation_symbol = "..."
 
 [gleam]
@@ -181,6 +194,8 @@ truncation_symbol = "..."
 
 [hostname]
 ssh_symbol = "ssh "
+style = "bold #4fc1ff"
+format = "[$ssh_symbol$hostname]($style) "
 
 [java]
 symbol = "java "

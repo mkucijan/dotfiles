@@ -1,9 +1,8 @@
 return {
-  { "catppuccin/nvim", name = "catppuccin", lazy = false, priority = 1000,
-    opts = { flavour = "mocha" },
-    config = function(_, opts)
-      require("catppuccin").setup(opts)
-      vim.cmd.colorscheme("catppuccin-mocha")
+  { "Mofiqul/vscode.nvim", lazy = false, priority = 1000,
+    config = function()
+      require("vscode").setup({ style = "dark" })
+      vim.cmd.colorscheme("vscode")
     end },
   { "nvim-lualine/lualine.nvim", event = "VeryLazy", opts = { options = { theme = "auto", icons_enabled = vim.env.TERMUX_VERSION == nil } } },
   { "christoomey/vim-tmux-navigator", lazy = false },
