@@ -1,0 +1,35 @@
+# managed by chezmoi; deployed only with the ui profile
+[general]
+live_config_reload = true
+import = ["~/.config/alacritty/theme.toml", "~/.config/alacritty/local.toml"]
+
+[env]
+TERM = "alacritty"
+
+[font]
+size = {{ if eq .chezmoi.os "darwin" }}13.0{{ else }}10.0{{ end }}
+normal = { family = "JetBrainsMono Nerd Font" }
+
+[window]
+decorations = "{{ if eq .chezmoi.os "darwin" }}Buttonless{{ else }}None{{ end }}"
+dynamic_title = true
+dimensions = { columns = 160, lines = 48 }
+{{- if eq .chezmoi.os "darwin" }}
+option_as_alt = "Both"
+{{- end }}
+
+[selection]
+semantic_escape_chars = ",│`|:\"' ()[]{}<>"
+
+[[keyboard.bindings]]
+key = "V"
+mods = "Control|Shift"
+action = "Paste"
+[[keyboard.bindings]]
+key = "C"
+mods = "Control|Shift"
+action = "Copy"
+[[keyboard.bindings]]
+key = "Key0"
+mods = "Control"
+action = "ResetFontSize"

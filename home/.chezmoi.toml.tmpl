@@ -1,0 +1,24 @@
+{{- /* Profiles stack: base (always) + any of dev rust agent ui (rust = rustup toolchain, opt-in; also DOTFILES_RUST=1). Source of truth, in order:
+       $DOTFILES_PROFILES > legacy $DOTFILES_ROLE > previously stored value > prompt (default by host). */ -}}
+{{- $legacy := dict "server" "base" "phone" "base" "desktop" "base dev rust agent ui" -}}
+{{- $def := "base" -}}
+{{- if eq .chezmoi.os "darwin" -}}{{ $def = "base dev rust agent ui" }}
+{{- else if eq .chezmoi.hostname "arch" -}}{{ $def = "base dev rust agent ui" }}
+{{- end -}}
+{{- $p := env "DOTFILES_PROFILES" -}}
+{{- if and (not $p) (env "DOTFILES_ROLE") -}}{{ $p = get $legacy (env "DOTFILES_ROLE") | default "base" }}{{ end -}}
+{{- if and (not $p) (hasKey . "role") (not (hasKey . "profiles")) -}}{{ $p = get $legacy .role | default "base" }}{{ end -}}
+{{- if not $p -}}{{ $p = promptStringOnce . "profiles" "Profiles (space-separated: base dev rust agent ui)" $def }}{{ end -}}
+{{- if and (env "DOTFILES_RUST") (ne (env "DOTFILES_RUST") "0") -}}{{ $p = printf "%s rust" $p }}{{ end -}}
+{{- $list := list "base" -}}
+{{- range (splitList " " (replace "," " " $p)) -}}{{ if and . (not (has . $list)) }}{{ $list = append $list . }}{{ end }}{{ end -}}
+sourceDir = {{ .chezmoi.workingTree | quote }}
+
+[data]
+profiles = {{ join " " $list | quote }}
+termux = {{ contains "com.termux" (env "PREFIX") }}
+
+[data.profile]
+{{- range (list "base" "dev" "rust" "agent" "ui") }}
+{{ . }} = {{ has . $list }}
+{{- end }}

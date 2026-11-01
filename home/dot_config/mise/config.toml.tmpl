@@ -1,0 +1,79 @@
+# ~/.config/mise/config.toml — managed by chezmoi
+[settings]
+experimental = true
+lockfile = true
+# python envs via uv; rust (rust profile) via mise rust backend (rustup underneath)
+disable_backends = ["asdf", "cargo"]  # never compile from source; use aqua/github/core prebuilts only
+
+[tools]
+# ---- base: shell + core CLI (also on the Pi / Termux) ----
+chezmoi  = "latest"
+starship = { version = "latest", backend = "aqua:starship/starship" }
+fzf      = { version = "latest", backend = "aqua:junegunn/fzf" }
+ripgrep  = { version = "latest", backend = "aqua:BurntSushi/ripgrep" }
+fd       = { version = "latest", backend = "aqua:sharkdp/fd" }
+bat      = { version = "latest", backend = "aqua:sharkdp/bat" }
+eza      = { version = "latest", backend = "aqua:eza-community/eza", os = ["linux"] }  # no macOS release; brew on macOS (install.sh)
+zoxide   = { version = "latest", backend = "aqua:ajeetdsouza/zoxide" }
+delta    = { version = "latest", backend = "aqua:dandavison/delta" }
+lazygit  = "latest"
+jq       = "latest"
+dust     = { version = "latest", backend = "aqua:bootandy/dust" }
+{{- if not .termux }}
+neovim   = "latest"
+gh       = "latest"
+atuin    = { version = "latest", backend = "aqua:atuinsh/atuin" }
+btop     = { version = "latest", os = ["linux"] }
+bitwarden = "latest"   # bw CLI (personal vault only; not used by the secrets flow)
+"github:bitwarden/sdk-sm" = { version = "latest", version_prefix = "bws-v", bin = "bws" }   # Secrets Manager CLI
+{{- else }}
+# Termux: glibc bw binary does not run on bionic; use the npm build on pkg nodejs
+"npm:@bitwarden/cli" = "latest"
+# bws has no android build: `cargo install bws --locked` (pkg install rust) if needed
+{{- end }}
+{{- if .profile.dev }}
+
+# ---- dev: toolchains, LSPs, formatters (nvim enables LSPs only if the binary exists) ----
+node       = "lts"
+python     = "latest"
+uv         = { version = "latest", backend = "aqua:astral-sh/uv" }
+pnpm       = "latest"
+go         = "latest"
+tree-sitter = "latest"
+"aqua:LuaLS/lua-language-server" = "latest"
+stylua     = { version = "latest", backend = "aqua:JohnnyMorganz/StyLua" }
+ruff       = { version = "latest", backend = "aqua:astral-sh/ruff" }
+shellcheck = "latest"
+shfmt      = "latest"
+"npm:pyright" = "latest"
+"npm:typescript" = "latest"
+"npm:typescript-language-server" = "latest"
+"npm:bash-language-server" = "latest"
+xh         = { version = "latest", backend = "aqua:ducaale/xh" }
+tealdeer   = { version = "latest", backend = "aqua:tealdeer-rs/tealdeer" }
+{{- end }}
+{{- if .profile.rust }}
+
+# ---- rust: rustup toolchain (~1.5 GB, slow on ARM SBCs), opt-in ----
+rust       = { version = "stable", components = "rust-analyzer,rustfmt,clippy" }
+{{- end }}
+{{- if .profile.agent }}
+
+# ---- agent: AI tool helpers (the AI CLIs themselves: .chezmoidata/agents.toml) ----
+"github:vectorize-io/hindsight" = { version = "latest", bin = "hindsight" }
+{{- end }}
+
+[env]
+# EDITOR/VISUAL are set by zshrc to the real nvim binary (never a mise shim)
+
+[tasks.up]
+description = "Update dotfiles, tools and nvim plugins"
+run = ["chezmoi update --apply", "mise upgrade --bump=false", "nvim --headless -c 'if exists(\":Lazy\") | exe \"Lazy! sync\" | endif' +qa"]
+
+[tasks.doctor]
+description = "Health check of the terminal setup"
+run = ["mise doctor", "chezmoi doctor", "zsh -i -c 'zmodload zsh/zprof; exit' && hyperfine -N --warmup 2 'zsh -i -c exit' 2>/dev/null || time zsh -i -c exit"]
+
+[tasks.secrets]
+description = "Pull secrets from Bitwarden Secrets Manager (bws) per .chezmoidata/secrets.toml"
+run = ["chezmoi apply ~/.local/bin/secrets-sync", "secrets-sync", "chezmoi apply ~/.grok/config.toml"]

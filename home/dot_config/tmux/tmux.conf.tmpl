@@ -1,0 +1,87 @@
+# ~/.config/tmux/tmux.conf — managed by chezmoi (tmux >= 3.2)
+set -g default-terminal "tmux-256color"
+set -as terminal-features ",alacritty*:RGB,xterm-256color:RGB"
+set -g escape-time 10
+set -g history-limit 50000
+set -g focus-events on
+set -g display-time 2000
+set -g status-interval 5
+set -g status-position top
+set -g base-index 1
+setw -g pane-base-index 1
+set -g renumber-windows on
+set -g mouse on
+set -g allow-rename off
+setw -g aggressive-resize on
+
+# clipboard via OSC 52: works locally, over ssh/mosh, Termux, macOS
+set -g set-clipboard on
+set -g allow-passthrough on
+
+# prefix: backtick (as before)
+unbind C-b
+set -g prefix `
+bind ` send-prefix
+
+# splits/windows keep cwd
+unbind '"'; unbind %
+bind '"' split-window -c "#{pane_current_path}"
+bind v split-window -h -c "#{pane_current_path}"
+bind c new-window -c "#{pane_current_path}"
+bind h select-pane -L
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R
+bind -r H resize-pane -L 5
+bind -r J resize-pane -D 5
+bind -r K resize-pane -U 5
+bind -r L resize-pane -R 5
+bind r source-file ~/.config/tmux/tmux.conf \; display "reloaded"
+
+# vi copy mode (native regex search replaces copycat)
+setw -g mode-keys vi
+bind m copy-mode
+bind / copy-mode \; send-key ?
+unbind p; bind p paste-buffer
+bind -T copy-mode-vi v send -X begin-selection
+bind -T copy-mode-vi C-v send -X rectangle-toggle
+bind -T copy-mode-vi y send -X copy-selection-and-cancel
+{{- if .profile.ui }}
+bind -T copy-mode-vi o send -X copy-pipe-and-cancel "{{ if eq .chezmoi.os "darwin" }}xargs open{{ else }}xargs -r xdg-open{{ end }}"
+{{- end }}
+
+# Maglev-faithful status (inline; no tpm / no theme plugin).
+# Maglev (mkucijan/maglev) used Powerline triangles (U+E0B0..) which render as
+# "_" / boxes without a patched font. Colors/layout match maglev; separators are
+# plain spaces and "|" so Pi, Termux, and browser SSH stay clean.
+set -g visual-activity off
+set -g bell-action none
+set -g status-style "fg=colour253,bg=colour0"
+set -g status-left-length 32
+set -g status-right-length 64
+# yellow session badge (maglev colour11); blue while prefix held
+set -g status-left "#{?client_prefix,#[fg=colour16 bg=colour4 bold] #S #[fg=colour253 bg=colour0],#[fg=colour16 bg=colour11 bold] #S #[fg=colour253 bg=colour0]} "
+set -g status-right "#[fg=colour8] %R | %a %d %b "
+set -g window-status-separator ""
+set -g window-status-format "#[fg=colour8,bg=colour0] #I #W "
+set -g window-status-current-format " #[fg=colour16 bg=colour4 bold] #I | #W #[fg=colour253 bg=colour0]"
+set -g window-status-activity-style "fg=default,bg=default,underscore"
+set -g window-status-bell-style "fg=colour11,bg=default,blink,bold"
+set -g window-status-last-style "fg=colour4"
+set -g pane-border-style "fg=colour8"
+set -g pane-active-border-style "fg=colour4"
+set -g message-style "fg=colour16,bg=colour11,bold"
+set -g message-command-style "fg=colour16,bg=colour160,bold"
+set -g mode-style "fg=colour16,bg=colour11,bold"
+set -g display-panes-active-colour colour4
+set -g display-panes-colour colour4
+setw -g clock-mode-colour colour4
+
+# plugins: pinned git checkouts from chezmoi externals
+set -g @continuum-restore 'on'
+set -g @resurrect-strategy-nvim 'session'
+run-shell -b "~/.local/share/tmux/plugins/vim-tmux-navigator/vim-tmux-navigator.tmux"
+run-shell -b "~/.local/share/tmux/plugins/tmux-resurrect/resurrect.tmux"
+run-shell -b "~/.local/share/tmux/plugins/tmux-continuum/continuum.tmux"
+
+if-shell "test -f ~/.config/tmux/local.conf" "source-file ~/.config/tmux/local.conf"

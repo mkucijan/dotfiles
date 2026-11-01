@@ -1,0 +1,6 @@
+#!/bin/sh
+# Keep the user's ~/.ssh/config; ensure `Include config.d/*` is its first line. Idempotent.
+cur="$(cat | grep -vx 'Include config\.d/\*')"
+printf 'Include config.d/*\n'
+[ -n "$cur" ] && printf '%s\n' "$cur"
+exit 0

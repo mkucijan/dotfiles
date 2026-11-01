@@ -1,0 +1,4 @@
+# copy to $ZDOTDIR/local.zsh (untracked). Example moved from the old ~/.zshrc on arch:
+# export PNPM_HOME="$HOME/.local/share/pnpm"; path+=("$PNPM_HOME/bin")
+# export PATH="$HOME/.grok/bin:$PATH"
+# export LD_LIBRARY_PATH=$HOME/.local/lib/arch-mojo:$LD_LIBRARY_PATH

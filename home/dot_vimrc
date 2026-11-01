@@ -1,0 +1,5 @@
+" minimal vim for hosts without nvim
+set nocompatible number relativenumber mouse=a ignorecase smartcase expandtab shiftwidth=4 tabstop=4 hidden
+let mapleader = " "
+nnoremap <leader><leader> <c-^>
+syntax on | filetype plugin indent on

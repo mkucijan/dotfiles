@@ -1,0 +1,40 @@
+# Every SSH-able device on the tailnet, by Tailscale MagicDNS name
+# (MagicDNS must be enabled on this device). Managed by chezmoi (dotfiles);
+# local/extra hosts go in ~/.ssh/config itself. New devices: see README "Adding a new device".
+# Standard: OpenSSH with keys on 2222 (Termux/Android: 8022); port 22 = Tailscale SSH, browser backup only.
+
+Host arch
+  HostName arch
+  User mkucijan
+  Port 2222
+
+Host rpi
+  HostName rpi-vpn-gateway
+  User mkucijan
+  Port 2222
+
+# Pixel 7: Debian chroot sshd
+Host pixel7
+  HostName pixel7
+  User mkucijan
+  Port 2222
+
+# Pixel 10 Pro XL: Termux sshd (Termux ignores the user name)
+Host pixel
+  HostName pixel-10-pro-xl
+  Port 8022
+
+# Chromecast (family room): Termux sshd
+Host family-room-tv
+  HostName family-room-tv
+  Port 8022
+
+# Unsure: tailnet peer "ssh-arch" (linux, 100.73.68.71) — likely an arch SSH/test node; enable if it runs sshd.
+# Host ssh-arch
+#   HostName ssh-arch
+#   User mkucijan
+
+Host *
+  ServerAliveInterval 30
+  IdentityFile ~/.ssh/id_ed25519
+  AddKeysToAgent yes

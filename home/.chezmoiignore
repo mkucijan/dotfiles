@@ -1,0 +1,27 @@
+README.md
+{{- /* profile gates: files only deployed when their profile is enabled */}}
+{{ if not .profile.dev }}
+.config/nvim/lua/plugins
+.config/nvim/lua/config/lazy.lua
+.config/nvim/lua/config/lsp.lua
+.config/nvim/lazy-lock.json
+{{ end }}
+{{ if not .profile.agent }}
+.grok
+.hindsight
+{{ end }}
+{{ if not .profile.ui }}
+.config/alacritty
+{{ end }}
+{{ if ne .chezmoi.os "linux" }}
+.config/systemd
+{{ end }}
+
+# gh auth tokens: never manage
+.config/gh/hosts.yml
+
+# secrets written by secrets-sync: never manage
+.config/bws
+.config/secrets
+.config/hindsight/api_key
+.aws

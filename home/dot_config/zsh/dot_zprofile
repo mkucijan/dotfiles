@@ -1,0 +1,2 @@
+# Login shells: honour the system-style ~/.profile (PATH additions, ssh-agent socket, ...) like bash/sh would.
+[[ -r $HOME/.profile ]] && emulate sh -c '. "$HOME/.profile"'

@@ -1,0 +1,47 @@
+# ~/.config/git/config — managed by chezmoi. ~/.gitconfig (if present) still wins for overrides.
+[user]
+	name = Mihovil Kucijan
+	email = mkucijan@gmail.com
+	signingkey = ~/.ssh/id_ed25519.pub
+[gpg]
+	format = ssh
+[gpg "ssh"]
+	allowedSignersFile = ~/.config/git/allowed_signers
+[commit]
+	gpgsign = false   # flip to true once the key is added as a signing key on GitHub
+[tag]
+	gpgsign = false
+[init]
+	defaultBranch = main
+[core]
+	eol = lf
+	autocrlf = input
+	pager = {{ if lookPath "delta" }}delta{{ else }}less -R{{ end }}
+[interactive]
+	diffFilter = delta --color-only
+[delta]
+	navigate = true
+	line-numbers = true
+[merge]
+	conflictstyle = zdiff3
+[pull]
+	rebase = true
+[push]
+	autoSetupRemote = true
+[fetch]
+	prune = true
+[rerere]
+	enabled = true
+[diff]
+	algorithm = histogram
+	colorMoved = default
+{{- if lookPath "gh" }}
+[credential "https://github.com"]
+	helper =
+	helper = !gh auth git-credential
+[credential "https://gist.github.com"]
+	helper =
+	helper = !gh auth git-credential
+{{- end }}
+[include]
+	path = ~/.config/git/local
