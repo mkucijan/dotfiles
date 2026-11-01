@@ -1,5 +1,6 @@
 return {
-  { "Mofiqul/vscode.nvim", lazy = false, priority = 1000,
+  { -- previous (main/modern) colorscheme; vscode Dark+
+  "Mofiqul/vscode.nvim", lazy = false, priority = 1000,
     config = function()
       require("vscode").setup({ style = "dark" })
       vim.cmd.colorscheme("vscode")

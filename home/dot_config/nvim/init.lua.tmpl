@@ -14,7 +14,7 @@ require("config.keymaps")
 require("config.lazy")
 require("config.lsp")
 {{- else }}
--- base: stock dark colorscheme (high contrast, zero plugin cost)
+-- base: Neovim default dark (zero plugin cost; matches lean previous $EDITOR)
 vim.o.background = "dark"
 pcall(vim.cmd.colorscheme, "default")
 {{- end }}

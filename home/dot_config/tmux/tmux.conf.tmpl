@@ -50,28 +50,32 @@ bind -T copy-mode-vi y send -X copy-selection-and-cancel
 bind -T copy-mode-vi o send -X copy-pipe-and-cancel "{{ if eq .chezmoi.os "darwin" }}xargs open{{ else }}xargs -r xdg-open{{ end }}"
 {{- end }}
 
-# VS Code Dark+ / Dark Modern status (inline, no theme plugins).
-# Plain ASCII spacing only — no block/powerline glyphs (those rendered as "_"
-# on Pi/Termux without a patched font).
+# Maglev-faithful status (inline; no tpm / no theme plugin).
+# Maglev (mkucijan/maglev) used Powerline triangles (U+E0B0..) which render as
+# "_" / boxes without a patched font. Colors/layout match maglev; separators are
+# plain spaces and "|" so Pi, Termux, and browser SSH stay clean.
 set -g visual-activity off
 set -g bell-action none
-set -g status-style "bg=#1f1f1f,fg=#cccccc"
-set -g status-left-length 40
-set -g status-right-length 60
-# session name left; yellow when prefix is held, otherwise VS Code blue accent
-set -g status-left "#{?client_prefix,#[fg=#1f1f1f bg=#e5e510 bold] #S #[fg=#cccccc bg=#1f1f1f],#[fg=#ffffff bg=#0078d4 bold] #S #[fg=#cccccc bg=#1f1f1f]} "
-set -g status-right " #[fg=#cccccc]#H  %H:%M "
+set -g status-style "fg=colour253,bg=colour0"
+set -g status-left-length 32
+set -g status-right-length 64
+# yellow session badge (maglev colour11); blue while prefix held
+set -g status-left "#{?client_prefix,#[fg=colour16 bg=colour4 bold] #S #[fg=colour253 bg=colour0],#[fg=colour16 bg=colour11 bold] #S #[fg=colour253 bg=colour0]} "
+set -g status-right "#[fg=colour8] %R | %a %d %b "
 set -g window-status-separator ""
-set -g window-status-format " #[fg=#9d9d9d]#I #W "
-set -g window-status-current-format " #[fg=#ffffff bg=#0078d4 bold] #I #W #[fg=#cccccc bg=#1f1f1f]"
-set -g window-status-activity-style "fg=#e5e510,bg=#1f1f1f"
-set -g pane-border-style "fg=#3c3c3c"
-set -g pane-active-border-style "fg=#0078d4"
-set -g message-style "bg=#264f78,fg=#ffffff"
-set -g message-command-style "bg=#264f78,fg=#ffffff"
-set -g mode-style "bg=#264f78,fg=#ffffff"
-set -g copy-mode-match-style "bg=#264f78,fg=#ffffff"
-set -g copy-mode-current-match-style "bg=#0078d4,fg=#ffffff"
+set -g window-status-format "#[fg=colour8,bg=colour0] #I #W "
+set -g window-status-current-format " #[fg=colour16 bg=colour4 bold] #I | #W #[fg=colour253 bg=colour0]"
+set -g window-status-activity-style "fg=default,bg=default,underscore"
+set -g window-status-bell-style "fg=colour11,bg=default,blink,bold"
+set -g window-status-last-style "fg=colour4"
+set -g pane-border-style "fg=colour8"
+set -g pane-active-border-style "fg=colour4"
+set -g message-style "fg=colour16,bg=colour11,bold"
+set -g message-command-style "fg=colour16,bg=colour160,bold"
+set -g mode-style "fg=colour16,bg=colour11,bold"
+set -g display-panes-active-colour colour4
+set -g display-panes-colour colour4
+setw -g clock-mode-colour colour4
 
 # plugins: pinned git checkouts from chezmoi externals
 set -g @continuum-restore 'on'
